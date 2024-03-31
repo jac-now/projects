@@ -16,8 +16,8 @@ def generate_password(min_length=8):  # Added a default minimum length
     "light", "watch", "card", "frog", "duck", "ant", "pig", "cow", "bee", "bug", "shirt", "sock", 
     "coat", "dress", "pants", "jacket", "milk", "egg", "rice", "soup", "bread", "cheese", "apple", "cake", "bike"
 ]
-    special_chars = "!@#$%^&*_+"  # Adjust as needed
-    num_or_spec_char = string.digits + special_chars  # All possible characters
+    special_chars = "!@#$%^&*_+"  # Add more in future
+    num_or_spec_char = string.digits + special_chars 
     #Password generation
     password = f"{random.choice(adjectives)}{random.choice(nouns)}"  
     random_number = f"{random.randint(0, 9999):04d}"  
@@ -25,7 +25,7 @@ def generate_password(min_length=8):  # Added a default minimum length
 
     # Modified filling loop
     while len(password) < min_length:
-        if random.random() < 0.5:  # 50% chance of a word pair
+        if random.random() < 0.5:  # 50% chance of a word pair - Change this value to change probability
             password = f"{random.choice(adjectives)}{random.choice(nouns)}-{password}"
         else:  # 50% chance of a random character
             password = f"{random.choice(num_or_spec_char)}{password}"
