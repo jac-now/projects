@@ -11,3 +11,5 @@ expenses.py a simple budget calculator in desperate need to improvement (my firs
 magic8ball.py you provide a question, and the magic 8 ball decides if it's a good idea or not
 
 passwordgenerator.py generates a simple password consisting of an adjective and a noun with a special character delimiter and a random number added to the end. Looking to add more functionality to this in the near future.
+
+emailmodifier.py generates email addresses with a + string appended to assist in the creation of unique logins and determine source of email leaks. Looking to make a PowerShell variant.
