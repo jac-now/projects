@@ -25,15 +25,15 @@ def validate_ip_prefix(prefix): #Validates that the entered IP prefix is in the 
 def is_online(ip, os_type): #Pings a host to check if it's online
     ping_cmd = ["ping", "-n", "1"] if os_type == "windows" else ["ping", "-c", "1"]
     try:
-        print(f"Executing: {' '.join(ping_cmd + [ip])}") #Debug line - prints command being executed to track where at in pings
-        output = subprocess.check_output(ping_cmd + [ip], timeout=3) #Timeout set to 3 seconds adjust as needed
+        #print(f"Executing: {' '.join(ping_cmd + [ip])}") #Debug line - prints command being executed to track where at in pings
+        output = subprocess.check_output(ping_cmd + [ip], timeout=10) #Timeout set to 10 seconds adjust as needed
         if  "Destination host unreachable" in str(output) or "Request timed out" in str(output): #Checks for errors
             #print(f"Ping to {ip} failed (Destination unreachable or timed out)")  #Debug line
             return False
         return True  
     except subprocess.CalledProcessError as e:
-        print(f"Ping to {ip} failed (Other Error)")
-        print(f"Error Output: {e.output}")  
+        #print(f"Ping to {ip} failed (Other Error)")
+        #print(f"Error Output: {e.output}")  
         return False
     finally:
         #print("Entered the finally block")  # Debug line
