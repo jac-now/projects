@@ -10,3 +10,4 @@
         }
     }
 }
+#Add user input for network octets in future
