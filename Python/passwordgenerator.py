@@ -25,11 +25,11 @@ def generate_password(min_length=8):  # Added a default minimum length
     random_number = f"{random.randint(0, 9999):04d}"  
     special_char = random.choice(special_chars) 
 
-    # Modified filling loop
+
     while len(password) < min_length -5:
         if random.random() < 0.8:  # 80% chance of a word pair - Change this value to change probability
             password = f"{password}-{random.choice(adjectives)}-{random.choice(nouns)}"
-        else:  # 50% chance of a random character
+        else:  # 20% chance of a random character
             password = f"{password}-{random.choice(num_or_spec_char)}"
 
     password += f"{random_number}{special_char}" 
