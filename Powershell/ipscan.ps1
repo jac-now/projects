@@ -4,3 +4,4 @@
         Write-Output "Host at 192.168.1.$_ is online."
     }
 }
+#Add user input for network octets in future
