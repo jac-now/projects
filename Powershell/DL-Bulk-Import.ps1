@@ -43,3 +43,5 @@ foreach ($row in $csv) {
         Add-Content -Path $logPath -Value "Mail contact with email $email already exists in DL."
     }
 }
+####TO DO###
+#Split into two scripts with first half for import of mail contacts, 2nd for bulk import to DL
