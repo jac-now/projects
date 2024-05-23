@@ -31,3 +31,9 @@ elif net < 0:
     print (f'You cannot survive you have a deficit of ${net:.2f} per day')
 else:
     print ('You just break even')
+
+####TO DO####
+#Improve overall readability
+#Make variable names self explanatory
+#Add branches for monthly, weekly, or daily breakdowns
+#
