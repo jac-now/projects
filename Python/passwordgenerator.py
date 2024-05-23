@@ -27,7 +27,7 @@ def generate_password(min_length=8):  # Added a default minimum length
 
     # Modified filling loop
     while len(password) < min_length -5:
-        if random.random() < 0.8:  # 50% chance of a word pair - Change this value to change probability
+        if random.random() < 0.8:  # 80% chance of a word pair - Change this value to change probability
             password = f"{password}-{random.choice(adjectives)}-{random.choice(nouns)}"
         else:  # 50% chance of a random character
             password = f"{password}-{random.choice(num_or_spec_char)}"
