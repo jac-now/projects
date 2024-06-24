@@ -8,6 +8,8 @@ ipscan.ps1 a quicker version of the above that does not include hostname resolut
 
 emailmodifier.ps1 generates email addresses with a + string appended to assist in the creation of unique logins and determine source of email leaks. Allows option to hash the append string for obscurity
 
+windows-update.ps1 installs and imports needed modules then grabs all eligable Windows, drivers, and Microsoft product updates and installs missing updates
+
 expenses.py a simple budget calculator in desperate need to improvement (my first coding project)
 
 magic8ball.py you provide a question, and the magic 8 ball decides if it's a good idea or not
