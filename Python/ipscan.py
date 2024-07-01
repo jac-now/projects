@@ -1,6 +1,7 @@
 import socket
 import subprocess
 import time
+from datetime import datetime 
 
 def get_os(): #Asks the user for their OS
     while True:
@@ -26,7 +27,7 @@ def is_online(ip, os_type): #Pings a host to check if it's online
     ping_cmd = ["ping", "-n", "1"] if os_type == "windows" else ["ping", "-c", "1"]
     try:
         #print(f"Executing: {' '.join(ping_cmd + [ip])}") #Debug line - prints command being executed to track where at in pings
-        output = subprocess.check_output(ping_cmd + [ip], timeout=10) #Timeout set to 10 seconds adjust as needed
+        output = subprocess.check_output(ping_cmd + [ip], timeout=16) #Timeout set to 10 seconds adjust as needed
         if  "Destination host unreachable" in str(output) or "Request timed out" in str(output): #Checks for errors
             #print(f"Ping to {ip} failed (Destination unreachable or timed out)")  #Debug line
             return False
@@ -44,6 +45,10 @@ def is_online(ip, os_type): #Pings a host to check if it's online
 
 def scan_network(ip_prefix): #Scans the network and reports online hosts with hostnames.
     os_type = get_os()  #Get the OS from the user
+    print("-" * 50) 
+    print(f"Scanning the {ip_prefix} network now") 
+    print("Time started: "+str(datetime.now())) 
+    print("-" * 50)
     for i in range(1, 255):
         ip = ip_prefix + "." + str(i)
         if is_online(ip, os_type):
