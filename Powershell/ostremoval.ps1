@@ -15,9 +15,9 @@ foreach ($User in $UserProfiles) {
         foreach ($OstFile in $ostFiles) {
             # Delete the OST file
 			try {
-				#Remove-Item $OstFile.FullName -Force
-				#Write-Host "Deleted OST file: $($OstFile.FullName)"
-				Write-Host "OST file that would be deleted: $($OstFile.FullName)"
+				#Remove-Item $OstFile.FullName -Force #Uncomment line to run live
+				#Write-Host "Deleted OST file: $($OstFile.FullName)" #Uncomment line to run live
+				Write-Host "OST file that would be deleted: $($OstFile.FullName)" #Comment line out when running live
 				}
 			catch {
 				Write-Host = "Error occured: $_"
