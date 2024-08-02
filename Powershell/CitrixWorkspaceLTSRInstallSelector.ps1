@@ -2,7 +2,7 @@
 .NOTES  
 
     File Name  : Citrix Workspace LTSR Install Combined
-    Author     : Jacob Nowlan jnowlan@abmis.ca
+    Author     : Jac-now
     Requires   : PowerShell V3.0
 	Intructions: Place .ps1 in C:\Temp and open an administrator shell and run:
 					powershell -ExecutionPolicy Bypass -File C:\Temp\CitrixWorkspaceLTSRInstallSelector.ps1
