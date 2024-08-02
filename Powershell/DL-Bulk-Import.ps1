@@ -1,10 +1,10 @@
 ###################################
-#3rd party vendors
+<#3rd party vendors
+Comment block out the section not needed between <# #> #>
 ###################################
 #Add users from a CSV as mail contacts
 $csvPath = "C:\Temp\ExternalEmailList.csv"
 $logPath = 'C:\Temp\ExternalEmailList.txt'
-
 # Import the CSV file
 $csv = Import-Csv -Path $csvPath
 
@@ -28,20 +28,33 @@ foreach ($row in $csv) {
 $distList = "DL"
 $csvPath = "C:\Temp\DLEmail.csv"
 $logPath = "C:\Temp\DLEmail.txt"
-
+#Import the CSV file
 $csv = Import-Csv -Path $csvPath
 
 foreach ($row in $csv) {
-    $email = $row.Email
-    # Check if the email already exists in the distribution list
-    $existingContact = Get-DistributionGroupMember -Identity $distList | Where-Object {$_.PrimarySmtpAddress -eq $email}
-    if ($null -eq $existingContact) {
-        # Add the email to the distribution list
-        Add-DistributionGroupMember -Identity $distList -Member $email
-        Add-Content -Path $logPath -Value "$email added to $distList"
-    } else {
-        Add-Content -Path $logPath -Value "Mail contact with email $email already exists in DL."
-    }
+    $email = $row.Email
+    try {
+        # Check if the email already exists in the distribution list
+        $existingContact = Get-DistributionGroupMember -Identity $distList | Where-Object {$_.PrimarySmtpAddress -eq $email}
+        if ($null -eq $existingContact) {
+            # Add the email to the distribution list
+            Add-DistributionGroupMember -Identity $distList -Member $email
+            # Verify if the user was added
+            $verification = Get-DistributionGroupMember -Identity $distList | Where-Object {$_.PrimarySmtpAddress -eq $email}
+            if ($null -ne $verification) {
+                Add-Content -Path $logPath -Value "$email added to $distList"
+            } else {
+                Add-Content -Path $logPath -Value "Failed to add $email to $distList"
+            }
+        } else {
+            Add-Content -Path $logPath -Value "User with email $email already exists in DL."
+        }
+    } catch {
+        # Log error details
+        Add-Content -Path $logPath -Value ("Error adding user with email {0}: {1}" -f $email, $_.Exception.Message)
+    }
 }
+
 ####TO DO###
 #Split into two scripts with first half for import of mail contacts, 2nd for bulk import to DL
+#Error message capturing
