@@ -1,6 +1,6 @@
 #import needed modules
 import tkinter as tk
-from tkinter import ttk, messagebox, simpledialog
+from tkinter import ttk, messagebox, simpledialog, filedialog
 import json
 from datetime import datetime
 
@@ -94,7 +94,7 @@ class ExpenseTrackerApp:
         current_date = datetime.now().strftime("%Y-%m")
         default_filename = f"expense_data_{current_date}.json"
         
-        file_path = filedialog.asksaveasfilename(
+        file_path = tk.filedialog.asksaveasfilename(
             defaultextension=".json",
             filetypes=[("JSON files", "*.json")],
             initialfile=default_filename
