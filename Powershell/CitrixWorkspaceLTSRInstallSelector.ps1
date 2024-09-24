@@ -9,19 +9,19 @@
 				  Choose appropriate option between 1-4
 #>
 
+
 if (!(Test-Path -Path C:\Temp)) {
     New-Item -ItemType Directory -Path C:\Temp
 };  #Tests is C:\Temp exists, and creates if not
 cd \Temp
 
 Write-Host " "
-Write-Host "1. For Store 1"
-Write-Host "2. For Store 2"
-Write-Host "3. For Both Stores"
-Write-Host "4. Run ReceiverCleanupUtility for a cleaner uninstall"
+Write-Host "1. For 2203 No Stores"
+Write-Host "2. For 1912 No Stores"
+Write-Host "3. Run ReceiverCleanupUtility for a cleaner uninstall"
 Write-Host "   Or Ctrl+c to exit"
 Write-Host " "
-$choice = Read-Host "Please enter your choice (1-4)"
+$choice = Read-Host "Please enter your choice (1-3)"
 
 switch ($choice) {
     '1' {
@@ -29,74 +29,65 @@ switch ($choice) {
         $href = $download.Links|Where-Object {$_.rel -like "*CitrixWorkspaceApp.exe*"}
         $DLurl = "https:" + $href.rel
 
+        Write-Host " "
         Write-Host "Downloading Citrix Workspace 2203 Installer"
         Invoke-WebRequest -Uri ($DLurl) -WebSession $websession -UseBasicParsing -OutFile "C:\Temp\CitrixWorkspaceApp.exe" #dynamically parses the page for a valid download url and retrieves the installer to C:\Temp
 
-
+        Write-Host " "
+        Write-Host "###################################################################################################"
         $uninstallChoice = Read-Host "Would you like to uninstall the current version before installing? (y/n)" #Allows option to bypass uninstall for if clean up tool was already run or no Citrix currently installed
         if ($uninstallChoice -eq 'y') {
+            Write-Host " "
             Write-Host "Uninstalling currently installed version of Citrix Workspace"
             .\CitrixWorkspaceApp.exe /silent /uninstall #Uninstalls the previous installed citrix version
             Start-Sleep -Seconds 150 #sleep added to allow uninstall to finish before installer launches
         }
 
-        Write-Host "Installing Citrix Workspace 2203 with Store 1"
-        .\CitrixWorkspaceApp.exe AutoUpdateCheck=disabled /silent /CleanInstall STORE0="Store name;storeurl;On;Store Description" ALLOWADDSTORE=S #silently installs,and sets store, disables update checks
+        Write-Host " "
+        Write-Host "Installing Citrix Workspace 2203"
+        .\CitrixWorkspaceApp.exe AutoUpdateCheck=disabled /silent /CleanInstall ALLOWADDSTORE=S #silently installs,and sets store, disables update checks
         Start-Sleep -Second 30
         Write-Host " "
-        Write-Host "Script Completed"
+        Write-Host "##################"
+        Write-Host "#Script Completed#"
+        Write-Host "##################"
         Write-Host " "
         Exit 0
     }
 
+    
     '2' {
-        $download = Invoke-WebRequest -UseBasicParsing -Uri ("https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-windows-ltsr/workspace-app-for-windows-LTSR-CU6-HF2.html") -SessionVariable websession
-        $href = $download.Links|Where-Object {$_.rel -like "*CitrixWorkspaceApp.exe*"}
-        $DLurl = "https:" + $href.rel
-
-        Write-Host "Downloading Citrix Workspace 2203 Installer"
-        Invoke-WebRequest -Uri ($DLurl) -WebSession $websession -UseBasicParsing -OutFile "C:\Temp\CitrixWorkspaceApp.exe"; #dynamically parses the page for a valid download url and retrieves the installer to C:\Temp
-        
-        $uninstallChoice = Read-Host "Would you like to uninstall the current version before installing? (y/n)" #Allows option to bypass uninstall for if clean up tool was already run or no Citrix currently installed
-        if ($uninstallChoice -eq 'y') {
-        Write-Host "Uninstalling currently installed version of Citrix Workspace"
-        .\CitrixWorkspaceApp.exe /silent /uninstall; #Uninstalls the previous installed citrix version
-        Start-Sleep -Seconds 150;#sleep added to allow uninstall to finish before installer launches
-        }
-
-		Write-Host "Installing Citrix Workspace 2203 with Store 2"
-        .\CitrixWorkspaceApp.exe AutoUpdateCheck=disabled /silent /CleanInstall STORE0="Store name;storeurl;On;Store Description" ALLOWADDSTORE=S #silently installs,and sets store, disables update checks
-        Start-Sleep -Second 30
-        Write-Host " "
-        Write-Host "Script Completed"
-        Write-Host " "
-        Exit 0
-    }
-    '3' {
         $download = Invoke-WebRequest -UseBasicParsing -Uri ("https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-windows-ltsr/workspace-app-for-windows-1912ltsr1.html") -SessionVariable websession
         $href = $download.Links|Where-Object {$_.rel -like "*CitrixWorkspaceApp.exe*"}
         $DLurl = "https:" + $href.rel
 
+        Write-Host " "
         Write-Host "Downloading Citrix Workspace 1912 Installer"
         Invoke-WebRequest -Uri ($DLurl) -WebSession $websession -UseBasicParsing -OutFile "C:\Temp\CitrixWorkspaceApp.exe"; #dynamically parses the page for a valid download url and retrieves the installer to C:\Temp
 
+        Write-Host " "
+        Write-Host "###################################################################################################"
         $uninstallChoice = Read-Host "Would you like to uninstall the current version before installing? (y/n)" #Allows option to bypass uninstall for if clean up tool was already run or no Citrix currently installed
         if ($uninstallChoice -eq 'y') {
-        Write-Host "Uninstalling currently installed version of Citrix Workspace"
-        .\CitrixWorkspaceApp.exe /silent /uninstall; #Uninstalls the previous installed citrix version
-        Start-Sleep -Seconds 150;#sleep added to allow uninstall to finish before installer launches
+            Write-Host " "
+            Write-Host "Uninstalling currently installed version of Citrix Workspace"
+            .\CitrixWorkspaceApp.exe /silent /uninstall; #Uninstalls the previous installed citrix version
+            Start-Sleep -Seconds 150;#sleep added to allow uninstall to finish before installer launches
         }
 
-		Write-Host "Installing Citrix Workspace 1912 with Both Stores"
-        .\CitrixWorkspaceApp.exe AutoUpdateCheck=disabled /silent /CleanInstall STORE0="Store name;storeurl;On;Store Description" STORE1="Store name;storeurl;On;Store Description" ALLOWADDSTORE=S #silently installs,and sets store, disables update checks
+        Write-Host " "
+		Write-Host "Installing Citrix Workspace 1912"
+        .\CitrixWorkspaceApp.exe AutoUpdateCheck=disabled /silent /CleanInstall ALLOWADDSTORE=S #silently installs,and sets store, disables update checks
         Start-Sleep -Second 30
         Write-Host " "
-        Write-Host "Script Completed"
+        Write-Host "##################"
+        Write-Host "#Script Completed#"
+        Write-Host "##################"
         Write-Host " "
         Exit 0
     }
 
-    '4' {
+    '3' {
         $versions = Get-ChildItem -Path "C:\Program Files (x86)\Citrix\" -Filter "Citrix WorkSpace *" -Directory
         $found = $false
 
@@ -108,6 +99,7 @@ switch ($choice) {
              Write-Host "File exists at path: $filePath"
                 Start-Process -FilePath $filePath
                 $found = $true
+                Write-Host "###################################################################################################"
                 Write-Host "Cleanup utility launched, when finished press Enter to continue"
                 $null = Read-Host
                 # Delete the Citrix folder from Program Files
@@ -121,20 +113,26 @@ switch ($choice) {
         }
         $tempPath = "C:\Temp\ReceiverCleanupUtility.exe"
         if (-not $found) {
+            Write-Host " "
+            Write-Host "###################################################################################################"
             Write-Host "Cleanup utility not found in Program Files, please place it in C:\Temp and press Enter to continue"
             $null = Read-Host
             if (Test-Path -Path $tempPath) {
+                Write-Host " "
+                Write-Host "###################################################################################################"
                 Write-Host "Running cleanup utility from C:\Temp. Press Enter when complete:"
                 Start-Process -FilePath $tempPath
                  $null = Read-Host
                  # Delete the Citrix folder from Program Files
                     $CitrixFolderPath = "C:\Program Files (x86)\Citrix"
                     if (Test-Path -Path $CitrixFolderPath) {
+                        Write-Host " "
                         Write-Host "Deleting Citrix folder from Program Files"
                      Remove-Item -Path $CitrixFolderPath -Recurse -Force
                  }
                 .\CitrixWorkspaceLTSRInstallSelector.ps1 #Restarts script from beginning to start install
             } else {
+                Write-Host " "
                 Write-Host "Cleanup utility not found in C:\Temp, starting script from beginning."
                 .\CitrixWorkspaceLTSRInstallSelector.ps1 #Restarts script from beginning to start install
             }          
@@ -142,7 +140,8 @@ switch ($choice) {
     
     }
     default {
-        Write-Host "Invalid choice. Please enter a number between 1 and 4."
+        Write-Host " "
+        Write-Host "Invalid choice. Please enter a number between 1 and 3."
     }
 }
 
