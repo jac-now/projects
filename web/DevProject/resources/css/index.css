@@ -1,0 +1,22 @@
+* {
+    font-family:'Times New Roman', Times, serif;
+    background-color: rgb(66, 66, 66);
+    color:mediumblue;
+  }
+  
+  
+  h1 {
+    color: navy;
+    text-align: center;
+  }
+  
+  
+  p, 
+  li {
+    font-size: 18px;   
+  }
+  
+  
+  a {
+    text-decoration: none;
+  }
