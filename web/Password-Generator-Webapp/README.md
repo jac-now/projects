@@ -1,4 +1,4 @@
-# abmsdpassgen
+# Password-Generator-Webapp
 A dockerized web app version of my password generator at https://github.com/jac-now/projects/blob/main/Python/passwordgenerator.py modified for use as a Web App
 
 
@@ -111,3 +111,9 @@ When hosting the Docker container on a server or cloud platform with a custom do
 **Important Note:**
 
 In production environments, it's strongly recommended to specify the exact origins allowed to access your API for security reasons. Only use `origins='*'` during development and testing.
+
+**TO DO:**
+   - Migrate forms to Flask Forms
+   - Add Text Area form to allow adding additional word lists
+   - Add more modification options to passwords
+   - Add into my personal website
