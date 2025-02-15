@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Password Generator</title>
+    <link href="style.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+    <div id="logo">
+        <img src="technomancer.png" alt="The Technomancer">  
+    </div>
+
+    <h1>Password Generator</h1>
+
+    <form action="/" method="POST">
+        <label for="length">Minimum Password Length:</label>
+        <input type="number" id="length" name="length" value="8" min="8">
+        <button type="submit">Generate</button>
+    </form>
+
+    <div id="result">
+        {% if password %}
+            <p>Your password is: <strong>{{ password }}</strong></p>
+        {% elif error_message %}
+            <p class="error-message">{{ error_message }}</p> 
+        {% else %}
+            <p>Your generated password will appear here.</p>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>This Docker Web App was created by Jacob Nowlan using Python, Flask, HTML, and CSS.</p>
+    </footer>
+
+</body>
+</html>
+
