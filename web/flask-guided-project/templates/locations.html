@@ -1,0 +1,91 @@
+<!-- extend from "base.html" here -->
+{% extends "base.html" %}
+
+<!-- begin block content here -->
+{% block content %}
+    <!-- Display the current category name -->
+    <h1>{{ categories[category] }}</h1> <!-- insert category here -->
+
+    <!-- Navigation bar for categories -->
+    <div class="navbar">
+        <!-- begin for loop here -->
+        {% for category, label in categories.items() %}
+            <!-- Create a link for each category -->
+            <a href="{{ category }}">{{ label }}</a> <!-- set attribute and text here -->
+        <!-- end for loop here -->
+        {% endfor %}
+    </div>
+
+    <!-- Table to display locations -->
+    <table>
+        <colgroup>
+            <col style="width: 20%">
+            <col style="width: 70%">
+            <col style="width: 10%">
+        </colgroup>
+        <tbody class="loctable">
+                <!-- begin for loop here -->
+                {% for location in locations %}
+                <tr>
+                    <!-- Display location name -->
+                    <td class="loc">{{ location.name }}</td> <!-- insert location name here -->
+                    <!-- Display location description -->
+                    <td class="desc">{{ location.description }}</td> <!-- insert location description here -->
+                    <td class="btns">
+                        <!-- start if statement here -->
+                        {% if category in ["recommended", "tovisit"] %}
+                        <!-- Form for upvote and delete buttons -->
+                        <form method="POST">
+                            <!-- Upvote button -->
+                            <input type="submit" class="up" name="{{ location.name }}" value=&#8599;> <!-- set name attribute here -->
+                            <!-- Delete button -->
+                            <input type="submit" class="del" name="{{ location.name }}" value="X"> <!-- set name attribute here -->
+                        </form>
+                        <!-- end if statement here -->
+                        {% endif %}
+                    </td>
+                </tr>
+                <!-- end for loop here -->
+                {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Form to add a new location -->
+    <form class="addform" action="{{ url_for('add_location') }}" method="POST"> <!-- set action attribute here -->
+        <!-- call hidden_tag() here -->
+        {{ add_location.hidden_tag() }}
+        <table>
+            <colgroup>
+                <col style="width: 40%">
+                <col style="width: 40%">
+                <col style="width: 20%">
+            </colgroup>
+            <tbody>
+                <tr>
+                    <!-- Labels for the form fields -->
+                    <td>{{ add_location.name.label }}</td> <!-- insert location name label here -->
+                    <td>{{ add_location.description.label }}</td> <!-- insert location description label here -->
+                    <td>{{ add_location.category.label }}</td> <!-- insert location category label here -->
+                </tr>
+                <tr>
+                    <!-- Input fields for the form -->
+                    <td>{{ add_location.name() }}</td> <!-- insert add_location name here -->
+                    <td>{{ add_location.description() }}</td> <!-- insert add_location description here -->
+                    <td>
+                        <!-- begin for loop here -->
+                        {% for button in add_location.category %}
+                            <!-- Radio buttons for category selection -->
+                            <div>{{ button }} {{ button.label }}</div> <!-- insert button here -->
+                        <!-- end for loop here -->
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <!-- Submit button for the form -->
+                    <td>{{ add_location.submit() }}</td> <!-- insert submit here -->
+                </tr>
+            </tbody>
+        </table>
+    </form>
+<!-- end block content here -->
+{% endblock %}

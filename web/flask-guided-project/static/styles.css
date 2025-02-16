@@ -1,0 +1,63 @@
+/* Style for h1 elements */
+h1 {
+    color: palevioletred; /* Set text color to pale violet red */
+}
+
+/* Style for navbar class */
+.navbar {
+    background-color: lightgray; /* Set background color to light gray */
+    padding: 8px; /* Add padding of 8px */
+}
+
+/* Style for anchor (a) elements */
+a {
+    text-decoration: none; /* Remove underline from links */
+    color: black; /* Set text color to black */
+    border-style: solid; /* Set border style to solid */
+    padding: 5px; /* Add padding of 5px */
+}
+
+/* Style for anchor (a) elements on hover */
+a:hover {
+    background-color: darkgrey; /* Change background color to dark gray on hover */
+}
+
+/* Grid area assignment for location class */
+.location { grid-area: loc; }
+
+/* Grid area assignment for description class */
+.description { grid-area: desc; }
+
+/* Grid area assignment for loc-form class */
+.loc-form { grid-area: frm; }
+
+/* Style for loc-container class */
+.loc-container {
+    display: grid; /* Use CSS Grid layout */
+    grid-template-areas: 
+      'loc loc  loc desc desc desc desc desc frm'; /* Define grid areas */
+    column-gap: 5px; /* Set column gap to 5px */
+    background-color: lightslategray; /* Set background color to light slate gray */
+    padding: 5px; /* Add padding of 5px */
+}
+
+/* Style for location div inside loc-container */
+.loc-container > div.location {
+    text-align: right; /* Align text to the right */
+}
+
+/* Style for all divs inside loc-container */
+.loc-container > div {
+    background-color: lightgray; /* Set background color to light gray */
+    text-align: left; /* Align text to the left */
+}
+
+/* Style for input elements with class up */
+input.up {
+    background-color: #5cb85c; /* Set background color to a shade of green */
+}
+
+/* Style for input elements with class del */
+input.del {
+    background-color: #d9534f; /* Set background color to a shade of red */
+}
