@@ -24,17 +24,17 @@ def generate_password(min_length=8):
 
     # Password generation
     password = f"{random.choice(adjectives)}-{random.choice(nouns)}"
-    random_number = f"{random.randint(0, 99):02d}"  # Four-digit random number
+    random_number = f"{random.randint(0, 99):02d}"  # Two-digit random number
     special_char = random.choice(special_chars)
 
     # Fill to meet minimum length
     while len(password) < min_length - 3:
-        if random.random() < 0.3:  #30% chance for adjective-noun pair to be added 70% for digit or spec char
+        if random.random() < 0.4:  #30% chance for adjective-noun pair to be added 70% for digit or spec char
             password = f"{password}-{random.choice(adjectives)}-{random.choice(nouns)}"
         else:
             password = f"{password}{random.choice(num_or_spec_char)}"
 
     # Add the random number and special character at the end
-    password += f"{random_number}{special_char}"
+    password = f"{special_char}{password}{random_number}"
 
     return password

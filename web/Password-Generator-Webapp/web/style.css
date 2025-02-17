@@ -10,6 +10,10 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    background-image: url('technomancer.png');
+    background-repeat: no-repeat;
+    background-position-x: 49%;
+    background-position-y: 25px;
 }
 
 h1 {
@@ -51,6 +55,10 @@ button:hover {
     background-color: #0069D9; /* Darker blue on hover */
 }
 
+#content {
+    margin-top: 125px;
+}
+
 #result {
     font-size: 24px;
     margin-top: 30px;
@@ -72,6 +80,8 @@ button:hover {
 
 /* Logo styling */
 #logo {
+    position: relative;
+    top: 150px;
     margin-bottom: 20px;
 }
 
