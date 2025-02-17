@@ -116,4 +116,5 @@ In production environments, it's strongly recommended to specify the exact origi
    - Migrate forms to Flask Forms
    - Add Text Area form to allow adding additional word lists
    - Add more modification options to passwords
+   - Keep input password length value in field after generating password
    - Add into my personal website
