@@ -166,7 +166,7 @@ def generate_password(min_length=8):
         else:
             password = f"{password}{random.choice(num_or_spec_char)}"
 
-    # Add the random number and special character at the end
+    # Add the random number and special character
     password = f"{special_char}{password}{random_number}"
 
     return password

@@ -162,7 +162,7 @@ def generate_password(min_length=8):  # Added a default minimum length
             password = f"{password}-{random.choice(adjectives)}-{random.choice(nouns)}"
         else:  # 30% chance of a random character
             password = f"{password}{random.choice(num_or_spec_char)}"
-
+    #Add the special character and random number
     password = f"{special_char}{password}{random_number}"
     return password
 
