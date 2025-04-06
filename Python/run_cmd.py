@@ -3,7 +3,7 @@ import sys
 import platform
 
 def run_command(command):
-    """Runs an external command and prints the output."""
+    #Runs an external command and prints the output
     try:
         result = subprocess.run(command, shell=True, capture_output=True, text=True, check=True)
         print("--- Command Output ---")
