@@ -15,9 +15,13 @@ def index():
             length_str = request.form['length']
             if not length_str:
                 raise ValueError("Password length cannot be empty.")
-            length = int(length_str)
-            if length < 8:
+            length = int(length_str) #Convert to interger to validate input
+            if length < 8: #Minimum password length
                 raise ValueError("Password length must be at least 8 characters.")
+            if length > 9000: #Easter Egg
+                raise ValueError("It's over 9000! But you probably don't require a password this long")
+            if length > 250: #Prevent unreasonable password length
+                raise ValueError("Why not go for a 5 digit number? Though do you really need a password this long?")
             password = generate_password(length)
             logging.info("Length = %d, password = %s", length, password)
         except ValueError as e:
