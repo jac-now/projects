@@ -2,9 +2,9 @@
 
 #TODO: Add functionality to extract phone numbers and email addresses from a choice between a file or clipboard
 
-import re, pyperclip
+import re, pyperclip # import the required libraries; pyperclip requires installation via pip
 
-phoneRegex = re.compile(r'''             # 111-111-1111, 111-1111, (111) 111-1111, 111-1111 ext 11119, ext. 11119, x11119
+phoneRegex = re.compile(r'''
 (
 ((\d\d\d) | (\(\d\d\d\)))?  # area code (optional with or without parentheses)
 (\s|-)                      # first separator
