@@ -18,7 +18,7 @@ phoneRegex = re.compile(r'''
 emailRegex = re.compile(r'''
 ([a-zA-Z0-9_.+]+      # name part
 @                     # @ symbol
-[a-zA-Z0-9-_]+          # domain name part
+[a-zA-Z0-9-_]+        # domain name part
 \.[a-zA-Z.]{2,10}+
 )   # TLD part
 ''', re.VERBOSE)
@@ -51,13 +51,13 @@ Another number is 250 867-5309.
 
 
 extractedPhoneNumbers = phoneRegex.findall(text)  # find all phone numbers
-extreactedEmailAddresses = emailRegex.findall(text)  # find all email addresses
+extractedEmailAddresses = emailRegex.findall(text)  # find all email addresses
 
 allPhoneNumbers = []  # list to hold all phone numbers
 for phoneNumber in extractedPhoneNumbers:
     allPhoneNumbers.append(phoneNumber[0])  # append the phone number to the list
 
-results = '\n'.join(allPhoneNumbers) + '\n'.join(extreactedEmailAddresses) 
+results = '\n'.join(allPhoneNumbers) + '\n'.join(extractedEmailAddresses) 
 
 print(results)  # print the results
 pyperclip.copy(results) # copy the results to the clipboard
