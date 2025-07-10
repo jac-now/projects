@@ -1,63 +1,36 @@
 <#
 .SYNOPSIS
-    A script to install a list of common software using winget, organized by category.
+    A script to install software using winget, organized by category.
 .DESCRIPTION
-    This script provides a menu-driven interface to install software using winget.
-    It builds an installation plan based on user choices, asks for final confirmation,
-    and then executes the installations without further user interaction.
+    This script builds an installation plan based on user choices for software categories
+    and choice groups, asks for a final confirmation, and then executes the installations.
 .NOTES
-    Requires winget to be installed on the system.
-    The script must be run with administrator privileges.
+    Requires winget to be installed on the system and administrator privileges.
 #>
 
 # --- Data Structures ---
 
-# Define software that can be installed directly
-$softwareCategories = @{
-    "IT Tools" = @(
-        "7zip.7zip",
-        "Microsoft.PowerToys",
-        "Teamviewer.Teamviewer",
-        "Wireshark.Wireshark",
-        "Angryziber.AngryIPScanner",
-        "Insecure.Nmap",
-        "PuTTY.PuTTY",
-        "Microsoft.RemoteDesktopClient",
-        "Microsoft.Sysinternals.Suite",
-        "Veeam.VeeamAgent",
-        "CHOICE_GROUP:VNC Clients"
-    );
-    "Productivity & Office" = @(
-        "Microsoft.Teams",
-        "SlackTechnologies.Slack",
-        "Notion.Notion",
-        "Obsidian.Obsidian",
-        "Adobe.Acrobat.Reader.64-bit",
-        "Proton.ProtonDrive",
-        "Proton.ProtonVPN",
-        "Proton.ProtonMail",
-        "Microsoft.OneNote",
-        "ShareX.ShareX",
-        "Discord.Discord",
-        "CHOICE_GROUP:Office Suites",
-        "CHOICE_GROUP:Password Managers",
-        "CHOICE_GROUP:Web Browsers"
-    );
-    "Multimedia & Design" = @(
-        "Audacity.Audacity",
-        "VideoLAN.VLC",
-        "GIMP.GIMP.3",
-        "Inkscape.Inkscape",
-        "IrfanSkiljan.IrfanView"
-    );
-    "Developer Tools" = @(
-        "Microsoft.VisualStudioCode",
-        "Oracle.VirtualBox",
-        "Git.Git"
-    )
+# Define software categories, direct installs, and choice groups in one structure.
+$categories = @{
+    "IT Tools" = @{
+        Direct = @("7zip.7zip", "Microsoft.PowerToys", "Teamviewer.Teamviewer", "Wireshark.Wireshark", "Angryziber.AngryIPScanner", "Insecure.Nmap", "PuTTY.PuTTY", "Microsoft.RemoteDesktopClient", "Microsoft.Sysinternals.Suite", "Veeam.VeeamAgent");
+        Choices = @("VNC Clients");
+    };
+    "Productivity & Office" = @{
+        Direct = @("Microsoft.Teams", "SlackTechnologies.Slack", "Notion.Notion", "Obsidian.Obsidian", "Adobe.Acrobat.Reader.64-bit", "Proton.ProtonDrive", "Proton.ProtonVPN", "Proton.ProtonMail", "Microsoft.OneNote", "ShareX.ShareX", "Discord.Discord");
+        Choices = @("Office Suites", "Password Managers", "Web Browsers");
+    };
+    "Multimedia & Design" = @{
+        Direct = @("Audacity.Audacity", "VideoLAN.VLC", "GIMP.GIMP.3", "Inkscape.Inkscape", "IrfanSkiljan.IrfanView");
+        Choices = @(); # No choices in this category
+    };
+    "Developer Tools" = @{
+        Direct = @("Microsoft.VisualStudioCode", "Oracle.VirtualBox", "Git.Git");
+        Choices = @();
+    }
 }
 
-# Define groups of software where a user should choose one or more
+# Define the items within each choice group.
 $choiceGroups = @{
     "VNC Clients" = @("RealVNC.VNCViewer", "RealVNC.VNCServer", "TigerVNC.TigerVNC");
     "Office Suites" = @("Microsoft.Office", "LibreOffice.LibreOffice", "OnlyOffice.OnlyOffice");
@@ -65,189 +38,98 @@ $choiceGroups = @{
     "Web Browsers" = @("Google.Chrome", "Mozilla.Firefox")
 }
 
-# --- Function Definitions ---
+# --- Core Functions ---
 
-# Function to display all available software
-function List-SoftwareByCategory {
+# Main function to drive the installation planning and execution.
+function Start-InstallationWorkflow {
+    param (
+        [array]$categoryNames
+    )
     Clear-Host
-    Write-Host "Available Software by Category:"
-    Write-Host "--------------------------------"
-    foreach ($category in ($softwareCategories.Keys | Sort-Object)) {
-        Write-Host "`n$($category.ToUpper())"
-        foreach ($item in $softwareCategories[$category]) {
-            if ($item.StartsWith("CHOICE_GROUP:")) {
-                $groupName = $item.Split(':')[1]
-                Write-Host "  - [$groupName]" -ForegroundColor Yellow
-                $choiceGroups[$groupName].ForEach({ Write-Host "    - $_" })
-            } else {
-                Write-Host "  - $item"
+    Write-Host "Building installation plan..."
+    $installQueue = [System.Collections.Generic.List[string]]::new()
+    $processedGroups = [System.Collections.Generic.List[string]]::new()
+
+    # Gather software from the selected categories
+    foreach ($categoryName in $categoryNames) {
+        $category = $categories[$categoryName]
+        $installQueue.AddRange($category.Direct)
+
+        foreach ($groupName in $category.Choices) {
+            if (-not $processedGroups.Contains($groupName)) {
+                $userChoices = Get-ChoiceGroupSelection -groupName $groupName -groupItems $choiceGroups[$groupName]
+                $installQueue.AddRange($userChoices)
+                $processedGroups.Add($groupName)
             }
         }
     }
-    Read-Host "`nPress Enter to return to the main menu..."
+
+    $uniqueQueue = $installQueue | Sort-Object -Unique
+    Execute-Installation -installQueue $uniqueQueue
 }
 
-# Function to get user's selection from a choice group
+# Prompts the user to select software from a choice group.
 function Get-ChoiceGroupSelection {
     param (
         [string]$groupName,
         [array]$groupItems
     )
     while ($true) {
-        Write-Host "`nPlease choose an option for $($groupName):" -ForegroundColor Cyan
-        for ($i = 0; $i -lt $groupItems.Count; $i++) {
-            Write-Host "$($i + 1). $($groupItems[$i])"
-        }
+        Write-Host "`nChoose for $($groupName):" -ForegroundColor Cyan
+        1..$groupItems.Count | ForEach-Object { Write-Host "$_. $($groupItems[$_ - 1])" }
         Write-Host "A. All of the above"
         Write-Host "N. None of the above"
         $choice = (Read-Host "Enter your choice (e.g., 1, A, N)").Trim()
 
-        if ($choice -ieq 'A') {
-            return $groupItems
+        if ($choice -ieq 'A') { return $groupItems }
+        if ($choice -ieq 'N') { return @() }
+        if ($choice -match '^\d+$' -and [int]$choice -ge 1 -and [int]$choice -le $groupItems.Count) {
+            return @($groupItems[[int]$choice - 1])
         }
-        if ($choice -ieq 'N') {
-            return @()
-        }
-
-        # Check if the choice is a number
-        if ($choice -match '^\d+
-
-# Function to build the list of software to install based on user choices
-function Build-InstallQueue {
-    param (
-        [array]$categoriesToProcess
-    )
-    $installQueue = [System.Collections.Generic.List[string]]::new()
-    $processedGroups = [System.Collections.Generic.List[string]]::new()
-
-    foreach ($category in $categoriesToProcess) {
-        foreach ($item in $softwareCategories[$category]) {
-            if ($item.StartsWith("CHOICE_GROUP:")) {
-                $groupName = $item.Split(':')[1]
-                if (-not $processedGroups.Contains($groupName)) {
-                    $userChoices = Get-ChoiceGroupSelection -groupName $groupName -groupItems $choiceGroups[$groupName]
-                    $installQueue.AddRange($userChoices)
-                    $processedGroups.Add($groupName)
-                }
-            } else {
-                $installQueue.Add($item)
-            }
-        }
+        Write-Host "Invalid input. Please try again." -ForegroundColor Red
     }
-    return $installQueue | Sort-Object -Unique
 }
 
-# Function to execute the installation of queued software
+# Confirms and runs the installation for the queued items.
 function Execute-Installation {
     param (
         [array]$installQueue
     )
     if ($installQueue.Count -eq 0) {
-        Write-Host "Nothing to install." -ForegroundColor Yellow
-        return
+        Write-Host "Nothing to install." -ForegroundColor Yellow; return
     }
 
     Clear-Host
-    Write-Host "The following $($installQueue.Count) packages will be installed:"
+    Write-Host "PLAN: The following $($installQueue.Count) packages will be installed:" -ForegroundColor Green
     $installQueue | ForEach-Object { Write-Host " - $_" }
-    $confirmation = Read-Host "`nDo you want to proceed? (y/n)"
+    if ((Read-Host "`nProceed with installation? (y/n)").Trim() -ne 'y') {
+        Write-Host "Installation cancelled."; return
+    }
 
-    if ($confirmation -ieq 'y') {
-        Write-Host "`nStarting installation..."
-        foreach ($softwareId in $installQueue) {
-            Write-Host "`nAttempting to install $($softwareId)..."
-            try {
-                winget install --id $softwareId --accept-package-agreements --accept-source-agreements --scope machine -h
-                Write-Host "Successfully installed $($softwareId)." -ForegroundColor Green
-            }
-            catch {
-                Write-Host "Failed to install $($softwareId)." -ForegroundColor Red
-            }
-            Write-Host "--------------------------------"
+    Write-Host "`nStarting installation..."
+    foreach ($softwareId in $installQueue) {
+        Write-Host "`nInstalling $($softwareId)..."
+        try {
+            winget install --id $softwareId --accept-package-agreements --accept-source-agreements --scope machine -h
+            Write-Host "Successfully installed $($softwareId)." -ForegroundColor Green
         }
-    } else {
-        Write-Host "Installation cancelled."
+        catch {
+            Write-Host "Failed to install $($softwareId)." -ForegroundColor Red
+        }
     }
 }
 
 # --- Menu Functions ---
-
-function Install-AllSoftware {
-    Clear-Host
-    Write-Host "Planning installation for ALL software..."
-    $queue = Build-InstallQueue -categoriesToProcess $softwareCategories.Keys
-    Execute-Installation -installQueue $queue
-    Read-Host "`nInstallation process finished. Press Enter to return to the main menu..."
-}
-
-function Install-Category {
-    Clear-Host
-    Write-Host "Select a category to install:"
-    $categories = $softwareCategories.Keys | Sort-Object
-    for ($i = 0; $i -lt $categories.Count; $i++) {
-        Write-Host "$($i + 1). $($categories[$i])"
-    }
-    Write-Host "0. Back to Main Menu"
-
-    $choice = Read-Host "`nEnter your choice"
-    if ($choice -eq '0') { return }
-
-    try {
-        $index = [int]$choice - 1
-        if ($index -ge 0 -and $index -lt $categories.Count) {
-            $selectedCategory = $categories[$index]
-            Write-Host "`nPlanning installation for the '$selectedCategory' category..."
-            $queue = Build-InstallQueue -categoriesToProcess @($selectedCategory)
-            Execute-Installation -installQueue $queue
-        } else {
-            Write-Host "Invalid choice." -ForegroundColor Yellow
-        }
-    }
-    catch {
-        Write-Host "Invalid input. Please enter a number." -ForegroundColor Yellow
-    }
-    Read-Host "`nInstallation process finished. Press Enter to return to the main menu..."
-}
-
-function Select-AndInstallSingleSoftware {
-    Clear-Host
-    Write-Host "Select a software package to install:"
-    $allSoftware = ($softwareCategories.Values | ForEach-Object { $_ }) + ($choiceGroups.Values | ForEach-Object { $_ })
-    $allSoftware = $allSoftware | Where-Object { -not $_.StartsWith("CHOICE_GROUP:") } | Sort-Object -Unique
-
-    for ($i = 0; $i -lt $allSoftware.Count; $i++) {
-        Write-Host "$($i + 1). $($allSoftware[$i])"
-    }
-    Write-Host "0. Back to Main Menu"
-
-    $choice = Read-Host "`nEnter your choice"
-    if ($choice -eq '0') { return }
-
-    try {
-        $index = [int]$choice - 1
-        if ($index -ge 0 -and $index -lt $allSoftware.Count) {
-            $selectedSoftware = $allSoftware[$index]
-            Execute-Installation -installQueue @($selectedSoftware)
-        } else {
-            Write-Host "Invalid choice." -ForegroundColor Yellow
-        }
-    }
-    catch {
-        Write-Host "Invalid input. Please enter a number." -ForegroundColor Yellow
-    }
-    Read-Host "`nPress Enter to return to the main menu..."
-}
 
 function Show-Menu {
     Clear-Host
     Write-Host "========================================"
     Write-Host "    Winget Software Installer Menu"
     Write-Host "========================================"
-    Write-Host "1. List all available software by category"
-    Write-Host "2. Install ALL software"
-    Write-Host "3. Install a specific category"
-    Write-Host "4. Install a single software package"
-    Write-Host "5. Exit"
+    Write-Host "1. Install by Category"
+    Write-Host "2. Install ALL Software"
+    Write-Host "3. List All Available Software"
+    Write-Host "4. Exit"
     Write-Host "----------------------------------------"
 }
 
@@ -255,191 +137,26 @@ function Show-Menu {
 
 while ($true) {
     Show-Menu
-    $choice = Read-Host "Enter your choice"
+    $choice = (Read-Host "Enter your choice").Trim()
     switch ($choice) {
-        "1" { List-SoftwareByCategory }
-        "2" { Install-AllSoftware }
-        "3" { Install-Category }
-        "4" { Select-AndInstallSingleSoftware }
-        "5" {
-            Write-Host "Exiting."
-            Exit
-        }
-        default {
-            Write-Host "Invalid choice. Please select a valid option." -ForegroundColor Yellow
-            Read-Host "Press Enter to continue..."
-        }
-    }
-}) {
-            $index = [int]$choice - 1
-            if ($index -ge 0 -and $index -lt $groupItems.Count) {
-                return @($groupItems[$index])
+        '1' {
+            Write-Host "Select a category:"
+            $categoryKeys = $categories.Keys | Sort-Object
+            1..$categoryKeys.Count | ForEach-Object { Write-Host "$_. $($categoryKeys[$_ - 1])" }
+            $catChoice = (Read-Host "Enter number").Trim()
+            if ($catChoice -match '^\d+$' -and [int]$catChoice -ge 1 -and [int]$catChoice -le $categoryKeys.Count) {
+                Start-InstallationWorkflow -categoryNames @($categoryKeys[[int]$catChoice - 1])
             } else {
-                Write-Host "Invalid number. Please choose a number from the list." -ForegroundColor Red
-            }
-        } else {
-            # Input is not 'A', 'N', or a number
-            Write-Host "Invalid input. Please enter a number from the list, 'A', or 'N'." -ForegroundColor Red
-        }
-    }
-}
-
-# Function to build the list of software to install based on user choices
-function Build-InstallQueue {
-    param (
-        [array]$categoriesToProcess
-    )
-    $installQueue = [System.Collections.Generic.List[string]]::new()
-    $processedGroups = [System.Collections.Generic.List[string]]::new()
-
-    foreach ($category in $categoriesToProcess) {
-        foreach ($item in $softwareCategories[$category]) {
-            if ($item.StartsWith("CHOICE_GROUP:")) {
-                $groupName = $item.Split(':')[1]
-                if (-not $processedGroups.Contains($groupName)) {
-                    $userChoices = Get-ChoiceGroupSelection -groupName $groupName -groupItems $choiceGroups[$groupName]
-                    $installQueue.AddRange($userChoices)
-                    $processedGroups.Add($groupName)
-                }
-            } else {
-                $installQueue.Add($item)
+                Write-Host "Invalid selection." -ForegroundColor Red
             }
         }
-    }
-    return $installQueue | Sort-Object -Unique
-}
-
-# Function to execute the installation of queued software
-function Execute-Installation {
-    param (
-        [array]$installQueue
-    )
-    if ($installQueue.Count -eq 0) {
-        Write-Host "Nothing to install." -ForegroundColor Yellow
-        return
-    }
-
-    Clear-Host
-    Write-Host "The following $($installQueue.Count) packages will be installed:"
-    $installQueue | ForEach-Object { Write-Host " - $_" }
-    $confirmation = Read-Host "`nDo you want to proceed? (y/n)"
-
-    if ($confirmation -ieq 'y') {
-        Write-Host "`nStarting installation..."
-        foreach ($softwareId in $installQueue) {
-            Write-Host "`nAttempting to install $($softwareId)..."
-            try {
-                winget install --id $softwareId --accept-package-agreements --accept-source-agreements --scope machine -h
-                Write-Host "Successfully installed $($softwareId)." -ForegroundColor Green
-            }
-            catch {
-                Write-Host "Failed to install $($softwareId)." -ForegroundColor Red
-            }
-            Write-Host "--------------------------------"
+        '2' { Start-InstallationWorkflow -categoryNames $categories.Keys }
+        '3' { 
+            List-SoftwareByCategory
+            Read-Host "`nPress Enter to return to the main menu..."
         }
-    } else {
-        Write-Host "Installation cancelled."
+        '4' { Write-Host "Exiting."; return }
+        default { Write-Host "Invalid choice. Please try again." -ForegroundColor Red }
     }
-}
-
-# --- Menu Functions ---
-
-function Install-AllSoftware {
-    Clear-Host
-    Write-Host "Planning installation for ALL software..."
-    $queue = Build-InstallQueue -categoriesToProcess $softwareCategories.Keys
-    Execute-Installation -installQueue $queue
-    Read-Host "`nInstallation process finished. Press Enter to return to the main menu..."
-}
-
-function Install-Category {
-    Clear-Host
-    Write-Host "Select a category to install:"
-    $categories = $softwareCategories.Keys | Sort-Object
-    for ($i = 0; $i -lt $categories.Count; $i++) {
-        Write-Host "$($i + 1). $($categories[$i])"
-    }
-    Write-Host "0. Back to Main Menu"
-
-    $choice = Read-Host "`nEnter your choice"
-    if ($choice -eq '0') { return }
-
-    try {
-        $index = [int]$choice - 1
-        if ($index -ge 0 -and $index -lt $categories.Count) {
-            $selectedCategory = $categories[$index]
-            Write-Host "`nPlanning installation for the '$selectedCategory' category..."
-            $queue = Build-InstallQueue -categoriesToProcess @($selectedCategory)
-            Execute-Installation -installQueue $queue
-        } else {
-            Write-Host "Invalid choice." -ForegroundColor Yellow
-        }
-    }
-    catch {
-        Write-Host "Invalid input. Please enter a number." -ForegroundColor Yellow
-    }
-    Read-Host "`nInstallation process finished. Press Enter to return to the main menu..."
-}
-
-function Select-AndInstallSingleSoftware {
-    Clear-Host
-    Write-Host "Select a software package to install:"
-    $allSoftware = ($softwareCategories.Values | ForEach-Object { $_ }) + ($choiceGroups.Values | ForEach-Object { $_ })
-    $allSoftware = $allSoftware | Where-Object { -not $_.StartsWith("CHOICE_GROUP:") } | Sort-Object -Unique
-
-    for ($i = 0; $i -lt $allSoftware.Count; $i++) {
-        Write-Host "$($i + 1). $($allSoftware[$i])"
-    }
-    Write-Host "0. Back to Main Menu"
-
-    $choice = Read-Host "`nEnter your choice"
-    if ($choice -eq '0') { return }
-
-    try {
-        $index = [int]$choice - 1
-        if ($index -ge 0 -and $index -lt $allSoftware.Count) {
-            $selectedSoftware = $allSoftware[$index]
-            Execute-Installation -installQueue @($selectedSoftware)
-        } else {
-            Write-Host "Invalid choice." -ForegroundColor Yellow
-        }
-    }
-    catch {
-        Write-Host "Invalid input. Please enter a number." -ForegroundColor Yellow
-    }
-    Read-Host "`nPress Enter to return to the main menu..."
-}
-
-function Show-Menu {
-    Clear-Host
-    Write-Host "========================================"
-    Write-Host "    Winget Software Installer Menu"
-    Write-Host "========================================"
-    Write-Host "1. List all available software by category"
-    Write-Host "2. Install ALL software"
-    Write-Host "3. Install a specific category"
-    Write-Host "4. Install a single software package"
-    Write-Host "5. Exit"
-    Write-Host "----------------------------------------"
-}
-
-# --- Main Script Body ---
-
-while ($true) {
-    Show-Menu
-    $choice = Read-Host "Enter your choice"
-    switch ($choice) {
-        "1" { List-SoftwareByCategory }
-        "2" { Install-AllSoftware }
-        "3" { Install-Category }
-        "4" { Select-AndInstallSingleSoftware }
-        "5" {
-            Write-Host "Exiting."
-            Exit
-        }
-        default {
-            Write-Host "Invalid choice. Please select a valid option." -ForegroundColor Yellow
-            Read-Host "Press Enter to continue..."
-        }
-    }
+    Read-Host "`nOperation finished. Press Enter to return to the main menu..."
 }
