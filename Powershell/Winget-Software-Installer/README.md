@@ -32,16 +32,22 @@ This PowerShell script automates the installation of a specific software package
 
 ## Configuration
 
-Currently, the script is hardcoded to install a specific program. To change the program it installs, you need to edit the `$programToInstall` variable directly within the `winget_software_install.ps1` file.
-
+Currently, the script is hardcoded to install a specific programs. These can be edited within the Data Structures section. The catergory names can be changed along with the winget IDs contained within them without issue.
 Example:
 ```powershell
-$programToInstall = "Microsoft.VisualStudioCode" # Change this to your desired Winget package ID
+$softwareCategories = @{
+    "IT Tools" = @(
+        "7zip.7zip",
+        "M2Team.NanaZip",
+        "Microsoft.PowerToys",
+        "Teamviewer.Teamviewer",
+    <SNIP>
+    );
 ```
 
 ## Example Usage
 
-When you run the script, it will attempt to install the program specified in the `$programToInstall` variable. You will see output similar to this:
+When you run the script, it will attempt to install the programs specified during menu slection. You will see output similar to this:
 
 ```
 Attempting to install: Visual Studio Code (Microsoft.VisualStudioCode)
@@ -54,8 +60,3 @@ Successfully verified installer hash
 Starting package install...
 Successfully installed
 ```
-
-## Notes
-
-*   This script is a basic example for single-program installation.
-*   For installing multiple programs or providing a selection menu, significant modifications would be required.
