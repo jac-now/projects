@@ -113,9 +113,14 @@ function Get-ChoiceGroupSelection {
                 return @()
             } elseif ([int]$index -ge 1 -and [int]$index -le [int]$groupItems.Count) {
                 return @($groupItems[[int]$index - 1]) # Adjust for 0-based array index
+            } else {
+                # Input is a number, but not a valid option
+                Write-Host "Invalid number. Please choose a number from the list." -ForegroundColor Red
             }
+        } else {
+            # Input is not a number
+            Write-Host "Invalid input. Please enter a number from the list." -ForegroundColor Red
         }
-        Write-Host "Invalid input. Please enter a valid number from the list." -ForegroundColor Red
     }
 }
 
