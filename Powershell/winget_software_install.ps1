@@ -107,9 +107,13 @@ function Get-ChoiceGroupSelection {
         Write-Host "DEBUG: TryParse result: $isNumeric, Parsed Index: $index"
         Write-Host "DEBUG: groupItems.Count: $($groupItems.Count)"
         if ($isNumeric) {
-            if ($index -eq ($groupItems.Count + 1)) {
+            $allOption = [int]($groupItems.Count + 1)
+            $noneOption = [int]($groupItems.Count + 2)
+            Write-Host "DEBUG: Calculated All option: $allOption, Calculated None option: $noneOption"
+
+            if ($index -eq $allOption) {
                 return $groupItems
-            } elseif ($index -eq ($groupItems.Count + 2)) {
+            } elseif ($index -eq $noneOption) {
                 return @()
             } elseif ($index -ge 1 -and $index -le $groupItems.Count) {
                 return @($groupItems[$index - 1]) # Adjust for 0-based array index
