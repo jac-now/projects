@@ -100,10 +100,11 @@ function Get-ChoiceGroupSelection {
         }
         Write-Host "$($groupItems.Count + 1). All of the above"
         Write-Host "$($groupItems.Count + 2). None of the above"
-        $choice = (Read-Host "Enter your choice (e.g., 1, $($groupItems.Count + 1), $($groupItems.Count + 2))").Trim()
-        Write-Host "DEBUG: User entered '$choice'"
+        $choice = Read-Host "Enter your choice (e.g., 1, $($groupItems.Count + 1), $($groupItems.Count + 2))"
+        $choice = $choice.Trim()
+        Write-Host "DEBUG: Raw input: '$choice'"
         $isNumeric = [int]::TryParse($choice, [ref]$index)
-        Write-Host "DEBUG: TryParse result: $isNumeric, Index: $index"
+        Write-Host "DEBUG: TryParse result: $isNumeric, Parsed Index: $index"
         if ($isNumeric) {
             if ($index -eq ($groupItems.Count + 1)) {
                 return $groupItems
