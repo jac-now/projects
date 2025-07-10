@@ -69,7 +69,7 @@ $softwareCategories = @{
         "Git.Git"
         "RedHat.VirtIO",
         "SoftwareFrededomConservancy.QEMUGuestAgent",
-        "Notepad++.Notepad++",
+        "Notepad++.Notepad++"
     )
     "Security Tools" = @(
         "Malwarebytes.Malwarebytes",
@@ -82,7 +82,7 @@ $softwareCategories = @{
         "Wireshark.Wireshark",
         "Angryziber.AngryIPScanner",
         "Insecure.Nmap",
-        "osquery.osquery",
+        "osquery.osquery"
     )
     "Gaming" = @(
         "Valve.Steam",
