@@ -98,16 +98,19 @@ function Get-ChoiceGroupSelection {
         for ($i = 0; $i -lt $groupItems.Count; $i++) {
             Write-Host "$($i + 1). $($groupItems[$i])"
         }
-        Write-Host "A. All of the above"
-        Write-Host "N. None of the above"
-        $choice = (Read-Host "Enter your choice (e.g., 1, A, N)").Trim()
+        Write-Host "$($groupItems.Count + 1). All of the above"
+        Write-Host "$($groupItems.Count + 2). None of the above"
+        $choice = (Read-Host "Enter your choice (e.g., 1, $($groupItems.Count + 1), $($groupItems.Count + 2))").Trim()
 
-        if ($choice -ieq 'A') {
-            return $groupItems
-        }
-        if ($choice -ieq 'N') {
-            return @()
-        }
+        $isNumeric = [int]::TryParse($choice, [ref]$index)
+        if ($isNumeric) {
+            if ($index -eq ($groupItems.Count + 1)) {
+                return $groupItems
+            }
+            if ($index -eq ($groupItems.Count + 2)) {
+                return @()
+            }
+            $index = $index - 1 # Adjust for 0-based array index
 
         # Try to parse as an integer
         $isNumeric = [int]::TryParse($choice, [ref]$index)
@@ -119,8 +122,7 @@ function Get-ChoiceGroupSelection {
                 Write-Host "Invalid number. Please choose a number from the list." -ForegroundColor Red
             }
         } else {
-            # Input is not 'A', 'N', or a valid number
-            Write-Host "Invalid input. Please enter a number from the list, 'A', or 'N'." -ForegroundColor Red
+            Write-Host "Invalid input. Please enter a number from the list." -ForegroundColor Red
         }
     }
 }
