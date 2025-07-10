@@ -103,21 +103,16 @@ function Get-ChoiceGroupSelection {
         $choice = Read-Host "Enter your choice (e.g., 1, $($groupItems.Count + 1), $($groupItems.Count + 2))"
         $choice = $choice.Trim()
         $isNumeric = [int]::TryParse($choice, [ref]$index)
-        Write-Host "DEBUG: TryParse result: $isNumeric, Parsed Index: $index"
-        Write-Host "DEBUG: groupItems.Count: $($groupItems.Count)"
-        Write-Host "DEBUG: Type of index: $($index.GetType().Name), Type of allOption: $($allOption.GetType().Name)"
         if ($isNumeric) {
-            $allOption = [int]($groupItems.Count + 1)
-            $noneOption = [int]($groupItems.Count + 2)
-            Write-Host "DEBUG: Calculated All option: $allOption, Calculated None option: $noneOption"
+            $allOption = ($groupItems.Count + 1)
+            $noneOption = ($groupItems.Count + 2)
 
-            if ($index -eq $allOption) {
-                Write-Host "DEBUG: Matched All option!"
+            if ([int]$index -eq [int]$allOption) {
                 return $groupItems
-            } elseif ($index -eq $noneOption) {
+            } elseif ([int]$index -eq [int]$noneOption) {
                 return @()
-            } elseif ($index -ge 1 -and $index -le $groupItems.Count) {
-                return @($groupItems[$index - 1]) # Adjust for 0-based array index
+            } elseif ([int]$index -ge 1 -and [int]$index -le [int]$groupItems.Count) {
+                return @($groupItems[[int]$index - 1]) # Adjust for 0-based array index
             } else {
                 Write-Host "Invalid number. Please choose a number from the list." -ForegroundColor Red
             }
