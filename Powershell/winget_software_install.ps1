@@ -110,6 +110,8 @@ function Get-ChoiceGroupSelection {
             if ($index -eq ($groupItems.Count + 2)) {
                 return @()
             }
+                return @()
+            }
             $index = $index - 1 # Adjust for 0-based array index
 
         # Try to parse as an integer
