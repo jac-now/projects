@@ -105,6 +105,7 @@ function Get-ChoiceGroupSelection {
         Write-Host "DEBUG: Raw input: '$choice'"
         $isNumeric = [int]::TryParse($choice, [ref]$index)
         Write-Host "DEBUG: TryParse result: $isNumeric, Parsed Index: $index"
+        Write-Host "DEBUG: groupItems.Count: $($groupItems.Count)"
         if ($isNumeric) {
             if ($index -eq ($groupItems.Count + 1)) {
                 return $groupItems
