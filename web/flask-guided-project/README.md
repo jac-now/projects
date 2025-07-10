@@ -1,17 +1,25 @@
 # Flask Guided Project
 
-This project is a guided tutorial for building a web application using the Flask framework.
+This project is a guided tutorial for building a web application using the Flask framework. It demonstrates how to create a simple to-do list style application for tracking places to visit.
 
 ## Table of Contents
 
 - [Introduction](#introduction)
+- [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Features](#features)
 
 ## Introduction
 
-This project demonstrates how to create a simple web application using Flask. It covers the basics of setting up a Flask project, creating routes, and rendering templates.
+This project demonstrates how to create a simple web application using Flask. It covers the basics of setting up a Flask project, creating routes, rendering templates, and using Flask-WTF for forms.
+
+## Features
+
+- **Add and Manage Locations**: Users can add new locations with a name, description, and category.
+- **Categorize Locations**: Locations are organized into three categories: "Recommended," "Places To Go," and "Visited!!!"
+- **Move Locations**: Users can move locations between categories.
+- **Delete Locations**: Users can delete locations from the list.
+- **Data Persistence**: Location data is stored in a CSV file (`data.csv`).
 
 ## Installation
 
@@ -48,10 +56,3 @@ This project demonstrates how to create a simple web application using Flask. It
     flask run
     ```
 2. Open your web browser and go to `http://127.0.0.1:5000`.
-
-## Features
-
-- Basic Flask setup
-- Routing
-- Template rendering
-- FlaskForms
