@@ -102,23 +102,25 @@ function Get-ChoiceGroupSelection {
         Write-Host "$($groupItems.Count + 2). None of the above"
         $choice = Read-Host "Enter your choice (e.g., 1, $($groupItems.Count + 1), $($groupItems.Count + 2))"
         $choice = $choice.Trim()
-        $index = 0 # Initialize $index
-        $isNumeric = [int]::TryParse($choice, [ref]$index)
 
-        if ($isNumeric) {
+        try {
+            $selectedIndex = [int]$choice
+
             $allOption = ($groupItems.Count + 1)
             $noneOption = ($groupItems.Count + 2)
 
-            if ([int]$index -eq [int]$allOption) {
+            if ($selectedIndex -eq $allOption) {
                 return $groupItems
-            } elseif ([int]$index -eq [int]$noneOption) {
+            } elseif ($selectedIndex -eq $noneOption) {
                 return @()
-            } elseif ([int]$index -ge 1 -and [int]$index -le [int]$groupItems.Count) {
-                return @($groupItems[[int]$index - 1]) # Adjust for 0-based array index
+            } elseif ($selectedIndex -ge 1 -and $selectedIndex -le $groupItems.Count) {
+                return @($groupItems[$selectedIndex - 1])
+            } else {
+                Write-Host "Invalid choice. Please enter a valid number from the list." -ForegroundColor Red
             }
+        } catch {
+            Write-Host "Invalid choice. Please enter a valid number from the list." -ForegroundColor Red
         }
-        # If we reach here, the input was not valid (either not numeric, or numeric but not a valid option)
-        Write-Host "Invalid choice. Please enter a valid number from the list." -ForegroundColor Red
     }
 }
 
