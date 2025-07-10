@@ -102,16 +102,17 @@ function Get-ChoiceGroupSelection {
         Write-Host "$($groupItems.Count + 2). None of the above"
         $choice = Read-Host "Enter your choice (e.g., 1, $($groupItems.Count + 1), $($groupItems.Count + 2))"
         $choice = $choice.Trim()
-        Write-Host "DEBUG: Raw input: '$choice'"
         $isNumeric = [int]::TryParse($choice, [ref]$index)
         Write-Host "DEBUG: TryParse result: $isNumeric, Parsed Index: $index"
         Write-Host "DEBUG: groupItems.Count: $($groupItems.Count)"
+        Write-Host "DEBUG: Type of index: $($index.GetType().Name), Type of allOption: $($allOption.GetType().Name)"
         if ($isNumeric) {
             $allOption = [int]($groupItems.Count + 1)
             $noneOption = [int]($groupItems.Count + 2)
             Write-Host "DEBUG: Calculated All option: $allOption, Calculated None option: $noneOption"
 
             if ($index -eq $allOption) {
+                Write-Host "DEBUG: Matched All option!"
                 return $groupItems
             } elseif ($index -eq $noneOption) {
                 return @()
