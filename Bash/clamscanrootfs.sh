@@ -1,4 +1,4 @@
 #!/bin/bash
 
 freshclam &&
-clamscan -r / --infected --log /var/log/Clamscan.log
+clamscan -r / --infected --log /var/log/ClamScan.log
