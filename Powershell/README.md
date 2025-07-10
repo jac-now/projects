@@ -17,4 +17,4 @@ This directory contains a collection of PowerShell scripts for various system ad
 - **Password_audit.ps1**: Audits Active Directory for users whose passwords have not been changed in a specified number of days and exports the list to a CSV.
 - **Shared_Mailbox_Audit.ps1**: Audits shared mailboxes for delegation and forwarding rules, exporting the results to a CSV.
 - **windows-update.ps1**: Installs all available Windows updates, including optional driver and Microsoft product updates.
-- **winget_software_install.ps1**: Installs a predefined list of software on a new machine using the winget package manager.
+
