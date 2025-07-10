@@ -102,7 +102,7 @@ function Get-ChoiceGroupSelection {
         Write-Host "$($groupItems.Count + 2). None of the above"
         $choice = Read-Host "Enter your choice (e.g., 1, $($groupItems.Count + 1), $($groupItems.Count + 2))"
         $choice = $choice.Trim()
-
+        $index = 0 # Initialize $index
         $isNumeric = [int]::TryParse($choice, [ref]$index)
 
         if ($isNumeric) {
