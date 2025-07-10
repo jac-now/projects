@@ -109,16 +109,17 @@ function Get-ChoiceGroupSelection {
             return @()
         }
 
-        # Check if the choice is a number
-        if ($choice -match '^\d+$') {
-            $index = [int]$choice - 1
+        # Try to parse as an integer
+        $isNumeric = [int]::TryParse($choice, [ref]$index)
+        if ($isNumeric) {
+            $index = $index - 1 # Adjust for 0-based array index
             if ($index -ge 0 -and $index -lt $groupItems.Count) {
                 return @($groupItems[$index])
             } else {
                 Write-Host "Invalid number. Please choose a number from the list." -ForegroundColor Red
             }
         } else {
-            # Input is not 'A', 'N', or a number
+            # Input is not 'A', 'N', or a valid number
             Write-Host "Invalid input. Please enter a number from the list, 'A', or 'N'." -ForegroundColor Red
         }
     }
