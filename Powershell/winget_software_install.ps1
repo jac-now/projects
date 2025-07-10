@@ -6,16 +6,18 @@
     It builds an installation plan based on user choices, asks for final confirmation,
     and then executes the installations without further user interaction.
 .NOTES
+    Author: Jac-now
     Requires winget to be installed on the system.
     The script must be run with administrator privileges.
 #>
 
 # --- Data Structures ---
 
-# Define software that can be installed directly
+# Define software by WinGet IDs that can be installed directly broken down by categories.
 $softwareCategories = @{
     "IT Tools" = @(
         "7zip.7zip",
+        "M2Team.NanaZip",
         "Microsoft.PowerToys",
         "Teamviewer.Teamviewer",
         "PuTTY.PuTTY",
@@ -25,14 +27,16 @@ $softwareCategories = @{
         "RealVNC.VNCViewer",
         "RealVNC.VNCServer",
         "TigerVNC.TigerVNC",
-        "Symless.Synergy",
-        "JAMSoftware.TreeSizeFree",
-        "WinDirStat.WinDirStat",
         "NoMachine.NoMachine",
         "Splahtop.SplashtopBusiness",
         "Splashtop.SOS",
         "AnyDesk.AnyDesk",
-        "Citrix.CitrixWorkspace.LTSR"
+        "Symless.Synergy",
+        "JAMSoftware.TreeSizeFree",
+        "WinDirStat.WinDirStat",
+        "Citrix.CitrixWorkspace.LTSR",
+        "Tailscale.Tailscale",
+        "Rufus.Rufus"
     );
     "Productivity & Office" = @(
         "Microsoft.Teams",
@@ -41,8 +45,8 @@ $softwareCategories = @{
         "Obsidian.Obsidian",
         "Adobe.Acrobat.Reader.64-bit",
         "Proton.ProtonDrive",
-        "Proton.ProtonVPN",
         "Proton.ProtonMail",
+        "Mozilla.Thunderbird",
         "Microsoft.OneNote",
         "ShareX.ShareX",
         "Discord.Discord",
@@ -82,7 +86,11 @@ $softwareCategories = @{
         "Wireshark.Wireshark",
         "Angryziber.AngryIPScanner",
         "Insecure.Nmap",
-        "osquery.osquery"
+        "osquery.osquery",
+        "SleuthKit.Autopsy",
+        "Proton.ProtonVPN",
+        "OpenVPNTechnologies.OpenVPNConnect"
+        "TorProject.TorBrowser"
     )
     "Gaming" = @(
         "Valve.Steam",
@@ -91,7 +99,9 @@ $softwareCategories = @{
         "Blizzard.BattleNet",
         "Ubisoft.Connect",
         "Amazon.Games",
-        "NexusMods.Vortex"
+        "NexusMods.Vortex",
+        "MoonlightGameStreamingProject.Moonlight",
+        "LizardByte.Sunshine",
     )
 }
 
@@ -159,7 +169,7 @@ function Execute-Installation {
     }
 }
 
-# --- Menu Functions ---
+# Menu functions for user interaction
 
 function Install-AllSoftware {
     Clear-Host
@@ -239,7 +249,7 @@ function Show-Menu {
     Write-Host "----------------------------------------"
 }
 
-# --- Main Script Body ---
+# Main script loop
 
 while ($true) {
     Show-Menu
