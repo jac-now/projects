@@ -106,20 +106,10 @@ function Get-ChoiceGroupSelection {
         if ($isNumeric) {
             if ($index -eq ($groupItems.Count + 1)) {
                 return $groupItems
-            }
-            if ($index -eq ($groupItems.Count + 2)) {
+            } elseif ($index -eq ($groupItems.Count + 2)) {
                 return @()
-            }
-                return @()
-            }
-            $index = $index - 1 # Adjust for 0-based array index
-
-        # Try to parse as an integer
-        $isNumeric = [int]::TryParse($choice, [ref]$index)
-        if ($isNumeric) {
-            $index = $index - 1 # Adjust for 0-based array index
-            if ($index -ge 0 -and $index -lt $groupItems.Count) {
-                return @($groupItems[$index])
+            } elseif ($index -ge 1 -and $index -le $groupItems.Count) {
+                return @($groupItems[$index - 1]) # Adjust for 0-based array index
             } else {
                 Write-Host "Invalid number. Please choose a number from the list." -ForegroundColor Red
             }
