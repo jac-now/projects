@@ -18,16 +18,21 @@ $softwareCategories = @{
         "7zip.7zip",
         "Microsoft.PowerToys",
         "Teamviewer.Teamviewer",
-        "Wireshark.Wireshark",
-        "Angryziber.AngryIPScanner",
-        "Insecure.Nmap",
         "PuTTY.PuTTY",
         "Microsoft.RemoteDesktopClient",
         "Microsoft.Sysinternals.Suite",
         "Veeam.VeeamAgent",
         "RealVNC.VNCViewer",
         "RealVNC.VNCServer",
-        "TigerVNC.TigerVNC"
+        "TigerVNC.TigerVNC",
+        "Symless.Synergy",
+        "JAMSoftware.TreeSizeFree",
+        "WinDirStat.WinDirStat",
+        "NoMachine.NoMachine",
+        "Splahtop.SplashtopBusiness",
+        "Splashtop.SOS",
+        "AnyDesk.AnyDesk",
+        "Citrix.CitrixWorkspace.LTSR"
     );
     "Productivity & Office" = @(
         "Microsoft.Teams",
@@ -48,7 +53,8 @@ $softwareCategories = @{
         "Proton.ProtonPass",
         "KeePassXCTeam.KeePassXC",
         "Google.Chrome",
-        "Mozilla.Firefox"
+        "Mozilla.Firefox",
+        "Brave.Brave"
     );
     "Multimedia & Design" = @(
         "Audacity.Audacity",
@@ -61,6 +67,31 @@ $softwareCategories = @{
         "Microsoft.VisualStudioCode",
         "Oracle.VirtualBox",
         "Git.Git"
+        "RedHat.VirtIO",
+        "SoftwareFrededomConservancy.QEMUGuestAgent",
+        "Notepad++.Notepad++",
+    )
+    "Security Tools" = @(
+        "Malwarebytes.Malwarebytes",
+        "ESET.Nod32",
+        "Bitdefender.Bitdefender",
+        "SUPERAntiSpyware.SUPERAntiSpyware",
+        "Wazuh.WazuhAgent",
+        "Tenable.Nessus",
+        "Sandboxie.Classic",
+        "Wireshark.Wireshark",
+        "Angryziber.AngryIPScanner",
+        "Insecure.Nmap",
+        "osquery.osquery",
+    )
+    "Gaming" = @(
+        "Valve.Steam",
+        "EpicGames.EpicGamesLauncher",
+        "GOG.Galaxy",
+        "Blizzard.BattleNet",
+        "Ubisoft.Connect",
+        "Amazon.Games",
+        "NexusMods.Vortex"
     )
 }
 
