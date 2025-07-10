@@ -25,7 +25,9 @@ $softwareCategories = @{
         "Microsoft.RemoteDesktopClient",
         "Microsoft.Sysinternals.Suite",
         "Veeam.VeeamAgent",
-        "CHOICE_GROUP:VNC Clients"
+        "RealVNC.VNCViewer",
+        "RealVNC.VNCServer",
+        "TigerVNC.TigerVNC"
     );
     "Productivity & Office" = @(
         "Microsoft.Teams",
@@ -39,9 +41,14 @@ $softwareCategories = @{
         "Microsoft.OneNote",
         "ShareX.ShareX",
         "Discord.Discord",
-        "CHOICE_GROUP:Office Suites",
-        "CHOICE_GROUP:Password Managers",
-        "CHOICE_GROUP:Web Browsers"
+        "Microsoft.Office",
+        "LibreOffice.LibreOffice",
+        "OnlyOffice.OnlyOffice",
+        "Bitwarden.Bitwarden",
+        "Proton.ProtonPass",
+        "KeePassXCTeam.KeePassXC",
+        "Google.Chrome",
+        "Mozilla.Firefox"
     );
     "Multimedia & Design" = @(
         "Audacity.Audacity",
@@ -57,14 +64,6 @@ $softwareCategories = @{
     )
 }
 
-# Define groups of software where a user should choose one or more
-$choiceGroups = @{
-    "VNC Clients" = @("RealVNC.VNCViewer", "RealVNC.VNCServer", "TigerVNC.TigerVNC");
-    "Office Suites" = @("Microsoft.Office", "LibreOffice.LibreOffice", "OnlyOffice.OnlyOffice");
-    "Password Managers" = @("Bitwarden.Bitwarden", "Proton.ProtonPass", "KeePassXCTeam.KeePassXC");
-    "Web Browsers" = @("Google.Chrome", "Mozilla.Firefox")
-}
-
 # --- Function Definitions ---
 
 # Function to display all available software
@@ -75,53 +74,10 @@ function List-SoftwareByCategory {
     foreach ($category in ($softwareCategories.Keys | Sort-Object)) {
         Write-Host "`n$($category.ToUpper())"
         foreach ($item in $softwareCategories[$category]) {
-            if ($item.StartsWith("CHOICE_GROUP:")) {
-                $groupName = $item.Split(':')[1]
-                Write-Host "  - [$groupName]" -ForegroundColor Yellow
-                $choiceGroups[$groupName].ForEach({ Write-Host "    - $_" })
-            } else {
-                Write-Host "  - $item"
-            }
+            Write-Host "  - $item"
         }
     }
     Read-Host "`nPress Enter to return to the main menu..."
-}
-
-# Function to get user's selection from a choice group
-function Get-ChoiceGroupSelection {
-    param (
-        [string]$groupName,
-        [array]$groupItems
-    )
-    while ($true) {
-        Write-Host "`nPlease choose an option for $($groupName):" -ForegroundColor Cyan
-        for ($i = 0; $i -lt $groupItems.Count; $i++) {
-            Write-Host "$($i + 1). $($groupItems[$i])"
-        }
-        Write-Host "$($groupItems.Count + 1). All of the above"
-        Write-Host "$($groupItems.Count + 2). None of the above"
-        $choice = Read-Host "Enter your choice (e.g., 1, $($groupItems.Count + 1), $($groupItems.Count + 2))"
-        $choice = $choice.Trim()
-
-        try {
-            $selectedIndex = [int]$choice
-
-            $allOption = ($groupItems.Count + 1)
-            $noneOption = ($groupItems.Count + 2)
-
-            if ($selectedIndex -eq $allOption) {
-                return $groupItems
-            } elseif ($selectedIndex -eq $noneOption) {
-                return @()
-            } elseif ($selectedIndex -ge 1 -and $selectedIndex -le $groupItems.Count) {
-                return @($groupItems[$selectedIndex - 1])
-            } else {
-                Write-Host "Invalid choice. Please enter a valid number from the list." -ForegroundColor Red
-            }
-        } catch {
-            Write-Host "Invalid choice. Please enter a valid number from the list." -ForegroundColor Red
-        }
-    }
 }
 
 # Function to build the list of software to install based on user choices
@@ -130,20 +86,10 @@ function Build-InstallQueue {
         [array]$categoriesToProcess
     )
     $installQueue = [System.Collections.Generic.List[string]]::new()
-    $processedGroups = [System.Collections.Generic.List[string]]::new()
 
     foreach ($category in $categoriesToProcess) {
         foreach ($item in $softwareCategories[$category]) {
-            if ($item.StartsWith("CHOICE_GROUP:")) {
-                $groupName = $item.Split(':')[1]
-                if (-not $processedGroups.Contains($groupName)) {
-                    $userChoices = Get-ChoiceGroupSelection -groupName $groupName -groupItems $choiceGroups[$groupName]
-                    $installQueue.AddRange($userChoices)
-                    $processedGroups.Add($groupName)
-                }
-            } else {
-                $installQueue.Add($item)
-            }
+            $installQueue.Add($item)
         }
     }
     return $installQueue | Sort-Object -Unique
@@ -224,8 +170,7 @@ function Install-Category {
 function Select-AndInstallSingleSoftware {
     Clear-Host
     Write-Host "Select a software package to install:"
-    $allSoftware = ($softwareCategories.Values | ForEach-Object { $_ }) + ($choiceGroups.Values | ForEach-Object { $_ })
-    $allSoftware = $allSoftware | Where-Object { -not $_.StartsWith("CHOICE_GROUP:") } | Sort-Object -Unique
+    $allSoftware = ($softwareCategories.Values | ForEach-Object { $_ }) | Sort-Object -Unique
 
     for ($i = 0; $i -lt $allSoftware.Count; $i++) {
         Write-Host "$($i + 1). $($allSoftware[$i])"
