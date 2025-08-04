@@ -1,5 +1,0 @@
-# Description: Windows Update script for Windows -- Includes Driver updates
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force; Set-ExecutionPolicy RemoteSigned -Force -Confirm:$false; Install-Module -Name PSWindowsUpdate -Force -Confirm:$false; Install-Module kbupdate -Force -Confirm:$false; Import-Module -Name PSWindowsUpdate; Import-Module -Name KBUpdate; Get-WindowsUpdate -Install -Verbose -MicrosoftUpdate -Confirm:$false; Get-KbNeededUpdate -UseWindowsUpdate | ECHO A; Set-ExecutionPolicy Restricted -Force
-
-# Without Drivers
-Install-PackageProvider -Name NuGet -MinimumVersion 2.8.5.201 -Force; Set-ExecutionPolicy RemoteSigned -Force -Confirm:$false; Install-Module -Name PSWindowsUpdate -Force -Confirm:$false; Install-Module kbupdate -Force -Confirm:$false; Import-Module -Name PSWindowsUpdate; Import-Module -Name KBUpdate; Get-WindowsUpdate -Install -Verbose -MicrosoftUpdate -NotCategory "Drivers" -Confirm:$false; Get-KbNeededUpdate -UseWindowsUpdate | ECHO A; Set-ExecutionPolicy Restricted -Force
