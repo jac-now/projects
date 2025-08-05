@@ -16,6 +16,6 @@ This directory contains a collection of PowerShell scripts for various system ad
 - **ostremoval.ps1**: Deletes Outlook OST files from user profiles to free up disk space.
 - **Password_audit.ps1**: Audits Active Directory for users whose passwords have not been changed in a specified number of days and exports the list to a CSV.
 - **Shared_Mailbox_Audit.ps1**: Audits shared mailboxes for delegation and forwarding rules, exporting the results to a CSV.
-- **windows-update.ps1**: Installs all available Windows updates, including optional driver and Microsoft product updates. This script has multiple options for installing updates.
+- **Windows-Updater/windows-update.ps1**: A menu-driven script to check for, install, and manage Windows updates using the PSWindowsUpdate module.
 - **Windows-License-Activator/windows-activation.ps1**: Activates Windows using a product key from a file.
 - **Winget-Software-Installer/winget_software_install.ps1**: Installs a list of common software using winget, organized by category.
