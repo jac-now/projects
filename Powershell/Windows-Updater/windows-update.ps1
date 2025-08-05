@@ -54,7 +54,7 @@ while ($true) {
         "2" { Get-WindowsUpdate -Install -Verbose -MicrosoftUpdate -AcceptAll |Out-File "c:\logs\$(get-date -f yyyy-MM-dd)-WindowsUpdate.log" -force }
         "3" { Get-WindowsUpdate -Install -Verbose -MicrosoftUpdate -NotCategory "Drivers" -AcceptAll | Out-File "c:\logs\$(get-date -f yyyy-MM-dd)-WindowsUpdate.log" -force }
         "4" { Install-UpdatesByCategory }
-        "5" { Install-SingleUpdate }]
+        "5" { Install-SingleUpdate }
         "6" { Get-WUHistory | Format-Table -AutoSize }
         "7" { Write-Host "Exiting..."; exit }
         default { Write-Host "Invalid choice. Please try again." -ForegroundColor Yellow }
