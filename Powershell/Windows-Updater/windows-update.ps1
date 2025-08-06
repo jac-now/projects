@@ -50,12 +50,62 @@ function Show-UpdateHistory {
 }
 
 # Install a All Updates Function - Not yet implemented
-function Install-AllUpdates {
-    Write-Host "This feature is not yet implemented. Please select another option." -ForegroundColor Yellow
-    Start-Sleep -Seconds 3 # This gives the user time to read the message
+function Install-Updates {
+  Clear-Host
+  Write-Host "Starting installation of Windows Updates..." -ForegroundColor Green
+
+# Prompt user for driver updates
+  $includeDrivers = Read-Host "Include driver updates? (Y/N)"
+
+# Prompt user for Microsoft updates
+  $includeMicrosoftUpdates = Read-Host "Include other Microsoft product updates (e.g., Office)? (Y/N)
+
+# Define a hash table with the base parameters
+  $params = @{
+    Install = $true
+    Verbose = $true
+    AcceptAll = $true
+  }
+
+# Add or Remove parameters based on user input
+  if ($includeDrivers -notmatch "^y$") {
+    Write-Host "Excluding driver updates..."
+    $params.Add("NotCategory", "Drivers")
+  }
+  if ($includeMicrosoftUpdates -match "^y$") {
+    Write-Host "Including Microsoft product updates..."                        
+    $params.Add("MicrosoftUpdate", $true)
+  }
+  else {
+    Write-Host "Excluding Microsoft product updates..."
+    }
+
+# Check for and create the log directory
+  if (-not (Test-Path -Path "C:\logs")) {
+    New-Item -Path "C:\logs" -ItemType Directory -Force | Out-Null
+  }
+
+# Define the log file path
+  $logFile = C:\logs\$(Get-Date -Format yyyy-MM-dd)-WindowsUpdate.log"
+
+# Execute the update command with dynamically created parameters
+  try {
+    Write-Host "This may take some time. Please wait...."
+    Get-WindowsUpdate @params | Tee-Object -FilePath $logFile -Append
+    Write-Host "Update process completed. Check the log file for details." -ForegroundColor Green
+  }
+
+  catch {
+    Write-Host "An error occured during the update process. Check the log file for details." -ForegroundColor Red
+  }
+
+# Pause the script until the user is ready to continue
+  Read-Host "`nPress Enter to return to the main menu..."
 }
 
-# Install a Non Dricer Updates Function - Not yet implemented
+
+
+# Install a Non Driver Updates Function - Not yet implemented
 function Install-NonDriverUpdates {
     Write-Host "This feature is not yet implemented. Please select another option." -ForegroundColor Yellow
     Start-Sleep -Seconds 3 # This gives the user time to read the message
@@ -79,7 +129,7 @@ while ($true) {
     $choice = Read-Host "Enter your choice"
     switch ($choice) {
         "1" { Show-Updates }
-        "2" { Install-AllUpdates }
+        "2" { Install-Updates }
         "3" { Install-NonDriverUpdates }
         "4" { Install-UpdatesByCategory }
         "5" { Install-SingleUpdate }]
