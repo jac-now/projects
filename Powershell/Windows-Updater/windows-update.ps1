@@ -49,7 +49,7 @@ function Show-UpdateHistory {
     Read-Host "`nPress Enter to return to the main menu..."
 }
 
-# Install a All Updates Function - Not yet implemented
+# Install Updates Function
 function Install-Updates {
   Clear-Host
   Write-Host "Starting installation of Windows Updates..." -ForegroundColor Green
@@ -58,7 +58,7 @@ function Install-Updates {
   $includeDrivers = Read-Host "Include driver updates? (Y/N)"
 
 # Prompt user for Microsoft updates
-  $includeMicrosoftUpdates = Read-Host "Include other Microsoft product updates (e.g., Office)? (Y/N)
+  $includeMicrosoftUpdates = Read-Host "Include other Microsoft product updates (e.g., Office)? (Y/N)"
 
 # Define a hash table with the base parameters
   $params = @{
