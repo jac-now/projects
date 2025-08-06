@@ -33,6 +33,34 @@ function Show-Menu {
     Write-Host "----------------------------------------"
 }
 
+# Show Available Updates Function
+function Show-Updates {
+  Clear-Host
+  Write-Host "Here are the available updates for this system"
+  Get-WindowsUpdate -ListAvailable | Format-Table -AutoSize
+  Read-Host "`nPress Enter to return to the main menu..."
+}
+
+# Show Update History Function
+function Show-UpdateHistory {
+    Clear-Host
+    Write-Host "Here is the Windows Update history for this system:"
+    Get-WUHistory | Format-Table -AutoSize
+    Read-Host "`nPress Enter to return to the main menu..."
+}
+
+# Install a All Updates Function - Not yet implemented
+function Install-AllUpdates {
+    Write-Host "This feature is not yet implemented. Please select another option." -ForegroundColor Yellow
+    Start-Sleep -Seconds 3 # This gives the user time to read the message
+}
+
+# Install a Non Dricer Updates Function - Not yet implemented
+function Install-NonDriverUpdates {
+    Write-Host "This feature is not yet implemented. Please select another option." -ForegroundColor Yellow
+    Start-Sleep -Seconds 3 # This gives the user time to read the message
+}
+
 # Install Updates by Category Function - Not yet implemented
 function Install-UpdatesByCategory {
     Write-Host "This feature is not yet implemented. Please select another option." -ForegroundColor Yellow
@@ -50,12 +78,12 @@ while ($true) {
     Show-Menu
     $choice = Read-Host "Enter your choice"
     switch ($choice) {
-        "1" { Get-WindowsUpdate -ListAvailable }
-        "2" { Get-WindowsUpdate -Install -Verbose -MicrosoftUpdate -AcceptAll |Out-File "c:\logs\$(get-date -f yyyy-MM-dd)-WindowsUpdate.log" -force }
-        "3" { Get-WindowsUpdate -Install -Verbose -MicrosoftUpdate -NotCategory "Drivers" -AcceptAll | Out-File "c:\logs\$(get-date -f yyyy-MM-dd)-WindowsUpdate.log" -force }
+        "1" { Show-Updates }
+        "2" { Install-AllUpdates }
+        "3" { Install-NonDriverUpdates }
         "4" { Install-UpdatesByCategory }
         "5" { Install-SingleUpdate }]
-        "6" { Get-WUHistory | Format-Table -AutoSize }
+        "6" { Show-UpdateHistory }
         "7" { Write-Host "Exiting..."; exit }
         default { Write-Host "Invalid choice. Please try again." -ForegroundColor Yellow }
     }
