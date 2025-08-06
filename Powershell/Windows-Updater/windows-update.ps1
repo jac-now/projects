@@ -86,7 +86,7 @@ function Install-Updates {
   }
 
 # Define the log file path
-  $logFile = C:\logs\$(Get-Date -Format yyyy-MM-dd)-WindowsUpdate.log"
+  $logFile = "C:\logs\$(Get-Date -Format yyyy-MM-dd)-WindowsUpdate.log"
 
 # Execute the update command with dynamically created parameters
   try {
