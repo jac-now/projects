@@ -44,8 +44,8 @@ This PowerShell script provides a user-friendly, menu-driven interface to manage
 ## Menu Options
 
 1.  **Check for updates**: Lists all available updates without installing them.
-2.  **Install ALL updates**: Installs all available updates, including drivers, optional updates, and updates for other Microsoft products (like Office).
-3.  **Install Windows updates except drivers**: Installs all updates but skips any that are categorized as "Drivers".
+2.  **Install ALL updates**: Installs all available updates, including drivers, optional updates, and updates for other Microsoft products (like Office). **Not yet implemented**
+3.  **Install Windows updates except drivers**: Installs all updates but skips any that are categorized as "Drivers". **Not yet implemented**
 4.  **Install Windows updates by category**: (Placeholder) This feature is not yet implemented.
 5.  **Install a single update by KB number**: (Placeholder) This feature is not yet implemented.
 6.  **Display Windows Update history**: Shows a formatted table of past update installations.
