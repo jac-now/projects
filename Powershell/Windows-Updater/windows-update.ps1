@@ -168,10 +168,39 @@ function Install-Updates {
 }
 
 
-# Install a Single Update Function - Not yet implemented
 function Install-SingleUpdate {
-    Write-Host "This feature is not yet implemented. Please select another option." -ForegroundColor Yellow
-    Start-Sleep -Seconds 3 # This gives the user time to read the message
+    Clear-Host
+    Write-Host "This function allows you to install a single update by its KB number. You will need to provide the KB number of the update you wish to install." -ForegroundColor Yellow
+    
+    # Prompt user for KB number
+    $kbNumber = Read-Host "Enter the KB number of the update including the 'KB' prefix (e.g., KB5005565)"
+
+    # Check if the KB number is valid
+    if ($kbNumber -match "^KB\d+$") {
+        # Check for and create the log directory
+        if (-not (Test-Path -Path "C:\logs")) {
+            New-Item -Path "C:\logs" -ItemType Directory -Force | Out-Null
+        }
+        
+        # Define the log file path
+        $logFile = "C:\logs\$(Get-Date -Format yyyy-MM-dd)-WindowsUpdate.log"
+        
+        Write-Host "Attempting to install update $kbNumber..." -ForegroundColor Green
+        try {
+            # Use Get-WindowsUpdate with the -Install and -KBArticleID parameters
+            Get-WindowsUpdate -Install -KBArticleID $kbNumber -AcceptAll | Tee-Object -FilePath $logFile -Append
+            Write-Host "Installation attempt for update $kbNumber has completed. Check the log file for details." -ForegroundColor Green
+        }
+        catch {
+            Write-Host "An error occurred while trying to install the update. Please check the KB number and try again." -ForegroundColor Red
+        }
+    }
+    else {
+        Write-Host "Invalid KB number format. Please ensure it starts with 'KB' followed by digits." -ForegroundColor Red
+    }
+
+    # Pause the script until the user is ready to continue
+    Read-Host "`nPress Enter to return to the Windows Update menu..."
 }
 
 
@@ -204,10 +233,14 @@ function Show-WingetUpdates {
 }
 
 
-# Install Winget Updates Function
 function Install-WingetUpdates {
     Clear-Host
     Write-Host "Starting installation of all Winget updates..." -ForegroundColor Green
+
+    # Check for and create the log directory
+    if (-not (Test-Path -Path "C:\logs")) {
+        New-Item -Path "C:\logs" -ItemType Directory -Force | Out-Null
+    }
 
     # Define the log file path
     $logFile = "C:\logs\$(Get-Date -Format yyyy-MM-dd)-WingetUpgrade.log"
@@ -219,27 +252,40 @@ function Install-WingetUpdates {
         return
     }
 
-    # Use winget to upgrade all packages
-    try { 
-        Write-Host "Displaying all upgradable packages..."
-        winget upgrade | Out-Host
-        # Provide opportunity for user to review updates and cancel if necessary
-        Write-Host "Waiting 6 seconds before proceeding with the installation, press Ctrl+C to cancel..." -ForegroundColor Yellow
-        Start-Sleep -Seconds 6
+    try {
+        Write-Host "Displaying all upgradable packages..." -ForegroundColor Yellow
+        winget upgrade
+        $confirm = Read-Host "Proceed with installing all available winget updates? (Y/N)"
 
-        # Check for and create the log directory
-        if (-not (Test-Path -Path "C:\logs")) {
-            New-Item -Path "C:\logs" -ItemType Directory -Force | Out-Null
+        if ($confirm -match "^y$") {
+            # Log the list of upgradable packages BEFORE the update
+            "$(Get-Date): The following packages were available for an update:" | Out-File $logFile -Append
+            "---------------------------------------------------------------------------------------------------" | Out-File $logFile -Append
+            winget upgrade | Out-File $logFile -Append
+            "---------------------------------------------------------------------------------------------------`n" | Out-File $logFile -Append
+
+            Write-Host "Upgrading packages via winget. Please wait for the process to complete..." -ForegroundColor Green
+            # Run the winget command and allow its output to display normally
+            winget upgrade --all --accept-source-agreements --accept-package-agreements
+            
+            # Log the list of upgradable packages AFTER the update
+            "$(Get-Date): Update process completed. The following packages are still available for update:" | Out-File $logFile -Append
+            "---------------------------------------------------------------------------------------------------" | Out-File $logFile -Append
+            winget upgrade | Out-File $logFile -Append
+            "---------------------------------------------------------------------------------------------------" | Out-File $logFile -Append
+            
+            Write-Host "Update process completed. A before-and-after log has been saved to '$logFile'." -ForegroundColor Green
         }
-
-        Write-Host "Upgrading packages via winget, this may take a while..." -ForegroundColor Green
-        winget upgrade --all --silent --accept-source-agreements --accept-package-agreements | Tee-Object -FilePath $logFile -Append
-        Write-Host "Update process completed. Check the log file $logFile for details." -ForegroundColor Green
+        else {
+            Write-Host "Winget updates cancelled." -ForegroundColor Yellow
+        }
     }
-
     catch {
-        Write-Host "An error occured during the upgrade process. Check the log file $logFile for details." -ForegroundColor Red
+        Write-Host "An error occurred during the upgrade process and has been logged." -ForegroundColor Red
+        "$(Get-Date): An error occurred during the upgrade process: $_" | Out-File $logFile -Append
     }
+
+    Read-Host "`nPress Enter to return to the Winget Updates menu..."
 }
 
 # --- Main Script Loop ---
