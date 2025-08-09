@@ -1,7 +1,16 @@
-###################################
-<#3rd party vendors
-Comment block out the section not needed between <# #> #>
-###################################
+<#
+.SYNOPSIS
+    Adds users to a distribution list from a CSV file.
+.DESCRIPTION
+    This script reads a list of users from a CSV file and adds them to a specified distribution list.
+    It also has a section to add users as mail contacts.
+.NOTES
+    Author: Jac-Now (https://github.com/jac-now)
+    Instructions: The script is divided into two parts. Comment out the section that is not needed.
+.EXAMPLE
+    PS C:\> .\DL-Bulk-Import.ps1
+    This command will execute the script.
+#>
 #Add users from a CSV as mail contacts
 $csvPath = "C:\Temp\ExternalEmailList.csv"
 $logPath = 'C:\Temp\ExternalEmailList.txt'

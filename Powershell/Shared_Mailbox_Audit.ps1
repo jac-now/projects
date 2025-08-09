@@ -1,3 +1,15 @@
+<#
+.SYNOPSIS
+    Audits shared mailboxes for delegation and forwarding.
+.DESCRIPTION
+    This script audits shared mailboxes for delegation and forwarding and exports the results to a CSV file.
+.NOTES
+    Author: Jac-Now (https://github.com/jac-now)
+.EXAMPLE
+    PS C:\> .\Shared_Mailbox_Audit.ps1
+    This command will execute the script and export a list of shared mailboxes with their delegation and forwarding status to C:\Temp\sharedmailbox-audit.csv.
+#>
+
 # Get all shared mailboxes
 $sharedMailboxes = Get-Mailbox -RecipientTypeDetails SharedMailbox -ResultSize Unlimited
 

@@ -1,6 +1,20 @@
+<#
+.SYNOPSIS
+    Creates a modified email address.
+.DESCRIPTION
+    This script takes an email address and a string from the user and creates a modified email address.
+    It can also hash the string for extra protection.
+.NOTES
+    Author: Jac-Now (https://github.com/jac-now)
+.EXAMPLE
+    PS C:\> .\emailmodifier.ps1
+    This command will execute the script and prompt the user for an email address and a string to append.
+#>
+
 #Asks user for email, string to append, and if extra protection should be taken
 #Splits email into 2 portions with '@' delimiter and appends the string with a '+' and reforms the email address
 #If account requires extra protection the string is hashed and the first 8 characters of the hash is used instead of the string
+
 function Create-ModifiedEmail {
     $email = Read-Host -Prompt "Enter your email address"
     $appendString = Read-Host -Prompt "Enter a string to append to your email"

@@ -1,12 +1,18 @@
 ﻿<#
-.NOTES  
-
-    File Name  : Citrix Workspace LTSR Install Combined
-    Author     : Jac-now
-    Requires   : PowerShell V3.0
-	Intructions: Place .ps1 in C:\Temp and open an administrator shell and run:
-					powershell -ExecutionPolicy Bypass -File C:\Temp\CitrixWorkspaceLTSRInstallSelector.ps1
-				  Choose appropriate option between 1-4
+.SYNOPSIS
+    A script to download and install Citrix Workspace.
+.DESCRIPTION
+    This script provides a menu to download and install different versions of Citrix Workspace.
+    It also includes an option to run the Receiver Cleanup Utility.
+.NOTES
+    Author: Jac-Now (https://github.com/jac-now)
+    Requires: PowerShell V3.0
+    Instructions: Place .ps1 in C:\Temp and open an administrator shell and run:
+                  powershell -ExecutionPolicy Bypass -File C:\Temp\CitrixWorkspaceLTSRInstallSelector.ps1
+                  Choose appropriate option between 1-4
+.EXAMPLE
+    PS C:\> .\CitrixWorkspaceLTSRInstallSelector.ps1
+    This command will execute the script and present the menu.
 #>
 
 

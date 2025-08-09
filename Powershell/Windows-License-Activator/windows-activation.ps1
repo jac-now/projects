@@ -7,10 +7,8 @@
     It then uses the 'slmgr.vbs' command-line tool to install the product key and activate Windows.
     The script requires administrative privileges to run.
 
-.AUTHOR
-    Jac-Now (https://github.com/jac-now)
-
 .NOTES
+    Author: Jac-Now (https://github.com/jac-now)
     Date: 2025-08-02
     This script is for legitimate purposes only.
     Ensure you have a legitimate license for the version of Windows you are activating.
