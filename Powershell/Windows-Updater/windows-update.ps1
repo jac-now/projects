@@ -1,3 +1,21 @@
+<#
+.SYNOPSIS
+A user-friendly script to manage Windows updates and Winget packages.
+
+.DESCRIPTION
+This script provides a menu-driven interface to check for, install, and manage Windows updates using the PSWindowsUpdate module. It also includes functionality to update applications using the Winget package manager.
+
+.EXAMPLE
+./windows-update.ps1
+This command will start the script and display the main menu.
+
+.NOTES
+Author: Jac-Now (https://github.com/jac-now)
+Version:    1.2
+Requires:   PSWindowsUpdate module and Winget package manager.
+This script must be run with administrator privileges.
+#>
+
 # Check to see if modules are installed and loaded
 Write-Host "Checking for required modules..."
 if (-not (Get-Module -Name "PSWindowsUpdate" -ErrorAction SilentlyContinue)) {
