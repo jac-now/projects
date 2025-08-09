@@ -1,17 +1,20 @@
-# Windows Updater Script
+# Windows Updater and Package Management Script
 
-This PowerShell script provides a user-friendly, menu-driven interface to manage Windows updates on a local machine. It leverages the `PSWindowsUpdate` module to check for, install, and review update history.
+This PowerShell script provides a user-friendly, menu-driven interface to manage Windows updates and Winget packages on a local machine. It leverages the `PSWindowsUpdate` module for Windows Update functionality and the native `winget` command-line tool for application updates.
 
 ## Features
- 
+
 *   **Automatic Module Management**: Checks if the `PSWindowsUpdate` module is installed and, if not, installs it for the current user.
-*   **Menu-Driven Interface**: Simplifies complex update commands into easy-to-understand options.
-*   **Flexible Installation Options**:
-    *   Install all available updates, including drivers and Microsoft product updates.
-    *   Install updates while excluding drivers.
+*   **Dual-Function Menu**: A clear main menu separates Windows Update and Winget package management into sub-menus.
+*   **Flexible Windows Update Options**:
     *   Check for available updates without installing.
-*   **Update History**: Quickly view the history of installed updates.
-*   **Logging**: Installation actions are logged to `C:\logs\YYYY-MM-DD-WindowsUpdate.log`.
+    *   Install all available updates with prompts to include/exclude drivers and other Microsoft product updates.
+    *   View the history of installed updates.
+    *   Install a single update by its KB number.
+*   **Winget Package Management**:
+    *   List all available application updates that can be managed by Winget.
+    *   Install all available Winget package updates.
+*   **Logging**: All update actions are logged to `C:\logs\`.
 
 ## Prerequisites
 
@@ -19,6 +22,7 @@ This PowerShell script provides a user-friendly, menu-driven interface to manage
 *   **PowerShell 5.1 or higher**: Required to run the script and install modules.
 *   **Administrator Privileges**: Essential for installing updates and managing system modules.
 *   **Internet Connection**: To download the `PSWindowsUpdate` module and the updates themselves.
+*   **Winget**: The script checks for `winget` and will notify you if it's not found.
 
 ## How to Use
 
@@ -39,20 +43,32 @@ This PowerShell script provides a user-friendly, menu-driven interface to manage
     .\windows-update.ps1
     ```
 
-5.  **Follow the On-Screen Menu**: Once the script is running, you will be presented with a menu. Enter the number corresponding to your desired action.
+5.  **Follow the On-Screen Menu**: Once the script is running, you will be presented with a main menu. Enter the number corresponding to your desired action to navigate to the appropriate sub-menu.
 
 ## Menu Options
 
+### Main Menu
+
+1.  **Windows Update Menu**: Navigate to the sub-menu for Windows Update tasks.
+2.  **Winget Application Updates**: Navigate to the sub-menu for Winget package management.
+3.  **Exit**: Closes the script.
+
+### Windows Update Sub-Menu
+
 1.  **Check for updates**: Lists all available updates without installing them.
-2.  **Install ALL updates**: Installs all available updates, including drivers, optional updates, and updates for other Microsoft products (like Office). **Not yet implemented**
-3.  **Install Windows updates except drivers**: Installs all updates but skips any that are categorized as "Drivers". **Not yet implemented**
-4.  **Install Windows updates by category**: (Placeholder) This feature is not yet implemented.
-5.  **Install a single update by KB number**: (Placeholder) This feature is not yet implemented.
-6.  **Display Windows Update history**: Shows a formatted table of past update installations.
-7.  **Exit**: Closes the script.
+2.  **Install Windows updates**: Installs available updates with prompts for including/excluding drivers and other Microsoft products.
+3.  **Display Windows Update history**: Shows a formatted table of past update installations.
+4.  **Install a single update by KB number**: Allows you to install a specific update using its KB number.
+5.  **Back to Main Menu**: Returns to the main menu.
+
+### Winget Updates Sub-Menu
+
+1.  **Show available winget updates**: Lists all applications with available updates through Winget.
+2.  **Install all winget updates**: Installs all available updates for applications managed by Winget.
+3.  **Back to Main Menu**: Returns to the main menu.
 
 ## Important Notes
 
 *   The script will automatically attempt to install the `PSWindowsUpdate` module from the PowerShell Gallery if it is not found on your system. This requires an internet connection.
-*   Update installations (Options 2 and 3) are logged to a file in `C:\logs\`. You may need to create this directory manually if it doesn't exist.
+*   Update installations are logged to a file in `C:\logs\`. The script will create this directory if it doesn't exist.
 *   Some updates may require a system restart to complete. The script will accept all prompts, but you may need to manually restart your computer afterward.
