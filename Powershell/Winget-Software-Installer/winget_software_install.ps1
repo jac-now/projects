@@ -5,8 +5,13 @@
     This script provides a menu-driven interface to install software using winget.
     It builds an installation plan based on user choices, asks for final confirmation,
     and then executes the installations without further user interaction.
+
+.EXAMPLE
+    PS C:\> .\winget_software_install.ps1
+    This command will start the script and display the main menu for software installation.
+
 .NOTES
-    Author: Jac-now
+    Author: Jac-Now (https://github.com/jac-now)
     Requires winget to be installed on the system.
     The script must be run with administrator privileges.
 #>
