@@ -1,0 +1,1 @@
+Get-NetAdapter | Disable Net-Adapter -confirm $false
