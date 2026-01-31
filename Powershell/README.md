@@ -6,6 +6,7 @@ This directory contains a collection of PowerShell scripts for various system ad
 
 - **CitrixWorkspaceLTSRInstallSelector.ps1**: Downloads and installs specific Citrix Workspace LTSR versions, with an option to run the Receiver Cleanup Utility.
 - **Disable_IPv6_All_Adapters.ps1**: Disables IPv6 on all network adapters.
+- **disable-all-network-adapters.ps1**: Disables all network adapters on the system.
 - **DL-Bulk-Import.ps1**: Bulk imports mail contacts from a CSV and adds them to a distribution list.
 - **emailmodifier.ps1**: Generates modified email addresses with a `+` and a custom string (or a hash of the string) for tracking and filtering.
 - **hostscan.ps1**: Scans a /24 network, pings each host, and attempts to resolve its hostname.

@@ -4,6 +4,7 @@ This repository contains a collection of my personal projects, ranging from simp
 
 ## Directories
 
+- **AdventOfCode**: A collection of solutions and scripts for Advent of Code puzzles.
 - **Bash**: A collection of Bash scripts for various system administration tasks.
 - **Powershell**: A collection of PowerShell scripts for various system administration and automation tasks.
 - **Python**: A collection of Python scripts for various tasks.
