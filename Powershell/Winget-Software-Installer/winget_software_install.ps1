@@ -106,7 +106,7 @@ $softwareCategories = @{
         "Amazon.Games",
         "NexusMods.Vortex",
         "MoonlightGameStreamingProject.Moonlight",
-        "LizardByte.Sunshine",
+        "LizardByte.Sunshine"
     )
 }
 
